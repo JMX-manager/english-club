@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fushun No.1 High School English Club</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --accent: #4f7cff;
+            --accent-dark: #3058c9;
+            --accent-glow: rgba(79, 124, 255, 0.15);
+            --bg: #0b0d17;
+            --surface: #11142a;
+            --surface-2: #1a1e3e;
+            --text: #e8ecf4;
+            --text-muted: #8892b0;
+            --radius: 1rem;
+            --radius-sm: 0.5rem;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ---- Nav ---- */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(11, 13, 23, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        nav .logo {
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+        nav .logo span { color: var(--accent); }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        nav .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        nav .nav-links a:hover { color: var(--text); }
+
+        /* ---- Lang Toggle (floating pill) ---- */
+        .lang-toggle-wrap {
+            position: fixed;
+            top: 0.75rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            pointer-events: none;
+        }
+        .lang-toggle {
+            pointer-events: auto;
+            background: linear-gradient(135deg, rgba(79, 124, 255, 0.85), rgba(79, 124, 255, 0.65));
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            padding: 0.35rem 1rem;
+            border-radius: 100px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: inherit;
+            letter-spacing: 0.04em;
+            box-shadow: 0 4px 20px rgba(79, 124, 255, 0.35);
+            backdrop-filter: blur(8px);
+        }
+        .lang-toggle:hover {
+            background: linear-gradient(135deg, rgba(79, 124, 255, 1), rgba(79, 124, 255, 0.8));
+            transform: scale(1.05);
+            box-shadow: 0 6px 28px rgba(79, 124, 255, 0.5);
+        }
+        .lang-toggle:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 640px) {
+            .lang-toggle-wrap { top: 0.6rem; }
+            .lang-toggle {
+                font-size: 0.7rem;
+                padding: 0.25rem 0.85rem;
+            }
+        }
+
+        /* push nav content down so it doesn't overlap the floating toggle */
+        nav { padding: 2.4rem 2rem 1rem; }
+        @media (max-width: 640px) {
+            nav { padding: 2.2rem 1rem 0.75rem; }
+        }
+
+        /* ---- Hero ---- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .hero .tagline {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--accent);
+            background: rgba(79, 124, 255, 0.1);
+            padding: 0.4rem 1.2rem;
+            border-radius: 100px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(79, 124, 255, 0.2);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.8rem, 8vw, 5.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            max-width: 900px;
+        }
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--accent), #a78bfa, #f472b6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            max-width: 560px;
+            margin-top: 1.5rem;
+            font-weight: 300;
+        }
+
+        .hero .cta-group {
+            margin-top: 2.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 2rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.25s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(79, 124, 255, 0.3);
+        }
+        .btn-primary:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(79, 124, 255, 0.4);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        .scroll-indicator .line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--text-muted), transparent);
+        }
+
+        /* ---- Sections ---- */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .section-sub {
+            color: var(--text-muted);
+            max-width: 600px;
+            font-weight: 300;
+            margin-bottom: 3rem;
+        }
+
+        /* ---- About ---- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+        .about-text p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+        .about-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .stat-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .stat-card .number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent);
+            line-height: 1;
+        }
+        .stat-card .label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+        }
+
+        @media (max-width: 768px) {
+            .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+        }
+
+        /* ---- Activities ---- */
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .activity-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: all 0.3s;
+        }
+        .activity-card:hover {
+            border-color: rgba(79, 124, 255, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        }
+        .activity-card .icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .activity-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .activity-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        /* ---- Join ---- */
+        .join-section {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 4rem;
+            text-align: center;
+            border: 1px solid rgba(79, 124, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        .join-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .join-section * { position: relative; z-index: 1; }
+        .join-section h2 {
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            margin-bottom: 1rem;
+        }
+        .join-section p {
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            font-weight: 300;
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .contact-item .emoji { font-size: 1.2rem; }
+
+        /* ---- Footer ---- */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 300;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        footer span { color: var(--accent); }
+
+        /* ---- Fade-in ---- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo" data-i18n="nav.logo">ENGLISH <span>·</span> CLUB</div>
+    <div class="nav-right">
+        <button class="lang-toggle" id="langToggle" onclick="toggleLang()">中文</button>
+        <ul class="nav-links">
+            <li><a href="#about" data-i18n="nav.about">About</a></li>
+            <li><a href="#activities" data-i18n="nav.activities">Activities</a></li>
+            <li><a href="#join" data-i18n="nav.join">Join</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-glow"></div>
+    <span class="tagline" data-i18n="hero.tagline">Fushun No.1 Senior High</span>
+    <h1 data-i18n="hero.title">Speak Beyond<br>the <span class="highlight">Classroom</span></h1>
+    <p data-i18n="hero.sub">
+        Where language meets curiosity — a community for students who want to actually
+        use English, not just study it.
+    </p>
+    <div class="cta-group">
+        <a href="#join" class="btn btn-primary" data-i18n="hero.cta1">Join Us →</a>
+        <a href="#about" class="btn btn-outline" data-i18n="hero.cta2">Learn More</a>
+    </div>
+    <div class="scroll-indicator">
+        <span data-i18n="hero.scroll">Scroll</span>
+        <div class="line"></div>
+    </div>
+</section>
+
+<!-- About -->
+<section id="about">
+    <div class="section-label fade-in" data-i18n="about.label">About Us</div>
+    <div class="about-grid">
+        <div class="about-text fade-in">
+            <h2 class="section-title" data-i18n="about.title">More Than a Club</h2>
+            <p data-i18n="about.p1">
+                The English Club at Fushun No.1 Senior High is a student-led space
+                where we drop the textbooks and actually <em>speak</em>. From movie
+                nights to debate sessions, we create real opportunities to use English
+                in ways that feel natural and fun.
+            </p>
+            <p data-i18n="about.p2">
+                No test prep. No grades. Just people who want to get better at expressing
+                themselves in another language.
+            </p>
+        </div>
+        <div class="about-stats fade-in">
+            <div class="stat-card">
+                <div class="number">40+</div>
+                <div class="label" data-i18n="about.stat1">Active Members</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">3</div>
+                <div class="label" data-i18n="about.stat2">Years Running</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">20+</div>
+                <div class="label" data-i18n="about.stat3">Events per Year</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">1</div>
+                <div class="label" data-i18n="about.stat4">Rule: Just Speak</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Activities -->
+<section id="activities">
+    <div class="section-label fade-in" data-i18n="activities.label">What We Do</div>
+    <h2 class="section-title fade-in" data-i18n="activities.title">Regular Activities</h2>
+    <p class="section-sub fade-in" data-i18n="activities.sub">
+        Something for everyone — from casual to competitive.
+    </p>
+    <div class="activities-grid">
+        <div class="activity-card fade-in">
+            <div class="icon">🎬</div>
+            <h3 data-i18n="activities.card1.title">Movie Nights</h3>
+            <p data-i18n="activities.card1.desc">Watch English films with subtitles, then discuss. Casual and fun.</p>
+        </div>
+        <div class="activity-card fade-in">
+            <div class="icon">🎤</div>
+            <h3 data-i18n="activities.card2.title">Speech & Debate</h3>
+            <p data-i18n="activities.card2.desc">Practice presenting and arguing — in English — on topics you care about.</p>
+        </div>
+        <div class="activity-card fade-in">
+            <div class="icon">📖</div>
+            <h3 data-i18n="activities.card3.title">Reading Circles</h3>
+            <p data-i18n="activities.card3.desc">Short stories, articles, poems. Read together, talk about what they mean.</p>
+        </div>
+        <div class="activity-card fade-in">
+            <div class="icon">🎮</div>
+            <h3 data-i18n="activities.card4.title">Language Games</h3>
+            <p data-i18n="activities.card4.desc">Scrabble, charades, improv — laugh your way to better English.</p>
+        </div>
+        <div class="activity-card fade-in">
+            <div class="icon">✍️</div>
+            <h3 data-i18n="activities.card5.title">Creative Writing</h3>
+            <p data-i18n="activities.card5.desc">Flash fiction, journaling, poetry slams. Express yourself on paper.</p>
+        </div>
+        <div class="activity-card fade-in">
+            <div class="icon">🌍</div>
+            <h3 data-i18n="activities.card6.title">Cultural Exchange</h3>
+            <p data-i18n="activities.card6.desc">Connect with international pen pals and explore cultures through English.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Join -->
+<section id="join">
+    <div class="join-section fade-in">
+        <h2 data-i18n="join.title">Ready to Speak?</h2>
+        <p data-i18n="join.sub">
+            No level requirements. Just bring yourself and a willingness to try.
+            We meet at Rm 3, 5F North Bldg.
+        </p>
+        <a href="#" class="btn btn-primary" data-i18n="join.cta" data-i18n-alert="join.alert">Get in Touch →</a>
+        <div class="contact-methods">
+            <span class="contact-item"><span class="emoji">📱</span> WeChat: kiroyi_0511</span>
+            <span class="contact-item"><span class="emoji">📍</span> <span data-i18n="join.location">Rm 3, 5F North Bldg</span></span>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <span data-i18n="footer.made">Made with </span><span>❤</span><span data-i18n="footer.by"> by Fushun No.1 Senior High English Club</span><br>
+    <span style="font-size:0.8rem; opacity:0.6;" data-i18n="footer.copy">&copy; 2026 · All rights reserved</span>
+</footer>
+
+<script>
+    // ===== i18n =====
+    const i18n = {
+        en: {
+            'nav.about': 'About',
+            'nav.activities': 'Activities',
+            'nav.join': 'Join',
+            'hero.tagline': 'Fushun No.1 Senior High',
+            'hero.title': 'Speak Beyond<br>the <span class="highlight">Classroom</span>',
+            'hero.sub': 'Where language meets curiosity \u2014 a community for students who want to actually use English, not just study it.',
+            'hero.cta1': 'Join Us \u2192',
+            'hero.cta2': 'Learn More',
+            'hero.scroll': 'Scroll',
+            'about.label': 'About Us',
+            'about.title': 'More Than a Club',
+            'about.p1': 'The English Club at Fushun No.1 Senior High is a student-led space where we drop the textbooks and actually <em>speak</em>. From movie nights to debate sessions, we create real opportunities to use English in ways that feel natural and fun.',
+            'about.p2': 'No test prep. No grades. Just people who want to get better at expressing themselves in another language.',
+            'about.stat1': 'Active Members',
+            'about.stat2': 'Years Running',
+            'about.stat3': 'Events per Year',
+            'about.stat4': 'Rule: Just Speak',
+            'activities.label': 'What We Do',
+            'activities.title': 'Regular Activities',
+            'activities.sub': 'Something for everyone \u2014 from casual to competitive.',
+            'activities.card1.title': 'Movie Nights',
+            'activities.card1.desc': 'Watch English films with subtitles, then discuss. Casual and fun.',
+            'activities.card2.title': 'Speech & Debate',
+            'activities.card2.desc': 'Practice presenting and arguing \u2014 in English \u2014 on topics you care about.',
+            'activities.card3.title': 'Reading Circles',
+            'activities.card3.desc': 'Short stories, articles, poems. Read together, talk about what they mean.',
+            'activities.card4.title': 'Language Games',
+            'activities.card4.desc': 'Scrabble, charades, improv \u2014 laugh your way to better English.',
+            'activities.card5.title': 'Creative Writing',
+            'activities.card5.desc': 'Flash fiction, journaling, poetry slams. Express yourself on paper.',
+            'activities.card6.title': 'Cultural Exchange',
+            'activities.card6.desc': 'Connect with international pen pals and explore cultures through English.',
+            'join.title': 'Ready to Speak?',
+            'join.sub': 'No level requirements. Just bring yourself and a willingness to try. We meet at Conference Rm 3, 5F North Bldg.',
+            'join.cta': 'Get in Touch \u2192',
+            'join.location': 'Rm 3, 5F North Bldg',
+            'join.alert': 'Search WeChat ID kiroyi_0511 to join the group!',
+            'nav.logo': 'ENGLISH <span>·</span> CLUB',
+            'footer.made': 'Made with ',
+            'footer.by': ' by Fushun No.1 Senior High English Club',
+            'footer.copy': '\u00a9 2026 \u00b7 All rights reserved'
+        },
+        zh: {
+            'nav.about': '关于我们',
+            'nav.activities': '活动',
+            'nav.join': '加入',
+            'hero.tagline': '抚顺市第一中学',
+            'hero.title': '英语不只在<br><span class="highlight">课堂上</span>',
+            'hero.sub': '当语言遇上好奇心 \u2014 一个让学生真正用英语交流的社团，不只是学英语而已。',
+            'hero.cta1': '加入我们 \u2192',
+            'hero.cta2': '了解更多',
+            'hero.scroll': '往下看',
+            'about.label': '关于我们',
+            'about.title': '不止是一个社团',
+            'about.p1': '抚顺一中英语社团是一个由学生主导的空间。在这里我们放下课本，真正开口说英语。从电影之夜到辩论赛，我们创造各种自然又有趣的机会去使用英语。',
+            'about.p2': '没有应试、没有分数。只有一群想用另一种语言更好表达自己的人。',
+            'about.stat1': '活跃成员',
+            'about.stat2': '创办年数',
+            'about.stat3': '年度活动',
+            'about.stat4': '规则：开口说',
+            'activities.label': '日常活动',
+            'activities.title': '常规活动',
+            'activities.sub': '总有一款适合你 \u2014 从轻松到竞技，任你选择。',
+            'activities.card1.title': '电影之夜',
+            'activities.card1.desc': '看英文字幕电影，看完一起讨论。轻松又好玩。',
+            'activities.card2.title': '演讲与辩论',
+            'activities.card2.desc': '用英语表达观点、陈述论据 \u2014 话题由你定。',
+            'activities.card3.title': '阅读圈',
+            'activities.card3.desc': '短篇故事、文章、诗歌。一起读，一起聊感受。',
+            'activities.card4.title': '语言游戏',
+            'activities.card4.desc': 'Scrabble、猜词、即兴表演 \u2014 笑着笑着就说好英语了。',
+            'activities.card5.title': '创意写作',
+            'activities.card5.desc': '微小说、日记、诗歌朗诵。把你的想法写在纸上。',
+            'activities.card6.title': '文化交流',
+            'activities.card6.desc': '与国际笔友交流，用英语探索不同文化。',
+            'join.title': '准备好开口了吗？',
+            'join.sub': '没有水平要求。带上你自己和一颗愿意尝试的心。地点在北楼五楼三号会议室。',
+            'join.cta': '联系我们 \u2192',
+            'join.location': '北楼五楼三号会议室',
+            'join.alert': '搜索微信号 kiroyi_0511，拉你进群！',
+            'nav.logo': '英语 <span>·</span> 社团',
+            'footer.made': '',
+            'footer.by': '抚顺市第一中学英语社团',
+            'footer.copy': '\u00a9 2026 \u00b7 保留所有权利'
+        }
+    };
+
+    let currentLang = 'en';
+
+    function toggleLang() {
+        currentLang = currentLang === 'en' ? 'zh' : 'en';
+        applyLang(currentLang);
+        document.getElementById('langToggle').textContent = currentLang === 'en' ? '中文' : 'English';
+        document.documentElement.lang = currentLang;
+    }
+
+    function applyLang(lang) {
+        const dict = i18n[lang];
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key] !== undefined) {
+                el.innerHTML = dict[key];
+            }
+        });
+        // update alert popup on the CTA button
+        const cta = document.querySelector('[data-i18n-alert]');
+        if (cta) {
+            cta.onclick = function(e) {
+                e.preventDefault();
+                alert(dict['join.alert']);
+            };
+        }
+    }
+
+    // ---- Fade-in on scroll ----
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // ---- Scroll to sections ----
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    // ---- Nav background on scroll ----
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+        nav.style.borderBottomColor = window.scrollY > 60
+            ? 'rgba(255,255,255,0.06)'
+            : 'rgba(255,255,255,0.04)';
+    });
+</script>
+
+</body>
+</html>
