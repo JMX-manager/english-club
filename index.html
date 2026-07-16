@@ -826,6 +826,9 @@
 
     initTheme();
 
+    // ---- Initial language setup + bind CTA alert ----
+    applyLang('en');
+
     // ---- Fade-in on scroll ----
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
