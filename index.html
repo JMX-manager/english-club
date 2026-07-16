@@ -9,17 +9,67 @@
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+        /* ===== Theme Variables ===== */
         :root {
             --accent: #4f7cff;
             --accent-dark: #3058c9;
+            --radius: 1rem;
+            --radius-sm: 0.5rem;
+            --transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Dark theme (default) */
+        [data-theme="dark"] {
             --accent-glow: rgba(79, 124, 255, 0.15);
             --bg: #0b0d17;
             --surface: #11142a;
             --surface-2: #1a1e3e;
             --text: #e8ecf4;
             --text-muted: #8892b0;
-            --radius: 1rem;
-            --radius-sm: 0.5rem;
+            --nav-bg: rgba(11, 13, 23, 0.8);
+            --nav-border: rgba(255,255,255,0.04);
+            --card-border: rgba(255,255,255,0.04);
+            --join-border: rgba(79,124,255,0.08);
+            --btn-outline-border: rgba(255,255,255,0.12);
+            --shadow: 0 12px 40px rgba(0,0,0,0.3);
+            --noise: 0.03;
+            --footer-border: rgba(255,255,255,0.04);
+            --scroll-line: linear-gradient(to bottom, var(--text-muted), transparent);
+            --logo-dot: #4f7cff;
+            --toggle-bg: linear-gradient(135deg, rgba(79, 124, 255, 0.85), rgba(79, 124, 255, 0.65));
+            --toggle-shadow: 0 4px 20px rgba(79, 124, 255, 0.35);
+            --hero-glow: radial-gradient(circle, rgba(79, 124, 255, 0.15) 0%, transparent 70%);
+            --stat-bg: #11142a;
+            --join-section-bg: #11142a;
+            --join-glow: radial-gradient(ellipse at center, rgba(79, 124, 255, 0.1) 0%, transparent 60%);
+            --card-hover-border: rgba(79, 124, 255, 0.2);
+        }
+
+        /* Light theme */
+        [data-theme="light"] {
+            --accent-glow: rgba(79, 124, 255, 0.08);
+            --bg: #f0f2f8;
+            --surface: #ffffff;
+            --surface-2: #e8ecf4;
+            --text: #1a1d2e;
+            --text-muted: #6b7280;
+            --nav-bg: rgba(240, 242, 248, 0.85);
+            --nav-border: rgba(0,0,0,0.06);
+            --card-border: rgba(0,0,0,0.05);
+            --join-border: rgba(79,124,255,0.15);
+            --btn-outline-border: rgba(0,0,0,0.10);
+            --shadow: 0 12px 40px rgba(79, 124, 255, 0.08);
+            --noise: 0.015;
+            --footer-border: rgba(0,0,0,0.06);
+            --scroll-line: linear-gradient(to bottom, var(--text-muted), transparent);
+            --logo-dot: #3058c9;
+            --toggle-bg: linear-gradient(135deg, #4f7cff, #6b8fff);
+            --toggle-shadow: 0 4px 16px rgba(79, 124, 255, 0.25);
+            --hero-glow: radial-gradient(circle, rgba(79, 124, 255, 0.06) 0%, transparent 70%);
+            --stat-bg: #ffffff;
+            --join-section-bg: #ffffff;
+            --join-glow: radial-gradient(ellipse at center, rgba(79, 124, 255, 0.05) 0%, transparent 60%);
+            --card-hover-border: rgba(79, 124, 255, 0.25);
         }
 
         html { scroll-behavior: smooth; }
@@ -30,6 +80,7 @@
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
+            transition: background var(--transition), color var(--transition);
         }
 
         body::before {
@@ -39,6 +90,8 @@
             background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
             pointer-events: none;
             z-index: 9999;
+            opacity: var(--noise);
+            transition: opacity var(--transition);
         }
 
         /* ---- Nav ---- */
@@ -50,9 +103,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(11, 13, 23, 0.8);
+            background: var(--nav-bg);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255,255,255,0.04);
+            border-bottom: 1px solid var(--nav-border);
+            transition: background var(--transition), border-color var(--transition);
         }
 
         nav .logo {
@@ -60,8 +114,9 @@
             font-size: 1.15rem;
             letter-spacing: -0.02em;
             color: var(--text);
+            transition: color var(--transition);
         }
-        nav .logo span { color: var(--accent); }
+        nav .logo span { color: var(--logo-dot); transition: color var(--transition); }
 
         .nav-right {
             display: flex;
@@ -83,23 +138,12 @@
         }
         nav .nav-links a:hover { color: var(--text); }
 
-        /* ---- Lang Toggle (floating pill) ---- */
-        .lang-toggle-wrap {
-            position: fixed;
-            top: 0.75rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 200;
-            display: flex;
-            justify-content: center;
-            pointer-events: none;
-        }
+        /* ---- Lang Toggle ---- */
         .lang-toggle {
-            pointer-events: auto;
-            background: linear-gradient(135deg, rgba(79, 124, 255, 0.85), rgba(79, 124, 255, 0.65));
+            background: var(--toggle-bg);
             border: 1px solid rgba(255,255,255,0.15);
             color: #fff;
-            padding: 0.35rem 1rem;
+            padding: 0.3rem 1rem;
             border-radius: 100px;
             font-size: 0.78rem;
             font-weight: 600;
@@ -107,30 +151,23 @@
             transition: all 0.25s;
             font-family: inherit;
             letter-spacing: 0.04em;
-            box-shadow: 0 4px 20px rgba(79, 124, 255, 0.35);
+            box-shadow: var(--toggle-shadow);
             backdrop-filter: blur(8px);
+            flex-shrink: 0;
         }
         .lang-toggle:hover {
             background: linear-gradient(135deg, rgba(79, 124, 255, 1), rgba(79, 124, 255, 0.8));
             transform: scale(1.05);
             box-shadow: 0 6px 28px rgba(79, 124, 255, 0.5);
         }
-        .lang-toggle:active {
-            transform: scale(0.95);
-        }
+        .lang-toggle:active { transform: scale(0.95); }
 
         @media (max-width: 640px) {
-            .lang-toggle-wrap { top: 0.6rem; }
-            .lang-toggle {
-                font-size: 0.7rem;
-                padding: 0.25rem 0.85rem;
-            }
-        }
-
-        /* push nav content down so it doesn't overlap the floating toggle */
-        nav { padding: 2.4rem 2rem 1rem; }
-        @media (max-width: 640px) {
-            nav { padding: 2.2rem 1rem 0.75rem; }
+            nav { padding: 0.75rem 1rem; }
+            .nav-right { gap: 0.75rem; }
+            nav .nav-links { gap: 0.75rem; }
+            nav .nav-links a { font-size: 0.75rem; }
+            .lang-toggle { font-size: 0.7rem; padding: 0.2rem 0.75rem; }
         }
 
         /* ---- Hero ---- */
@@ -149,11 +186,12 @@
             position: absolute;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            background: var(--hero-glow);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             pointer-events: none;
+            transition: background var(--transition);
         }
 
         .hero .tagline {
@@ -190,6 +228,7 @@
             max-width: 560px;
             margin-top: 1.5rem;
             font-weight: 300;
+            transition: color var(--transition);
         }
 
         .hero .cta-group {
@@ -226,7 +265,8 @@
         .btn-outline {
             background: transparent;
             color: var(--text);
-            border: 1px solid rgba(255,255,255,0.12);
+            border: 1px solid var(--btn-outline-border);
+            transition: all 0.25s, color var(--transition), border-color var(--transition);
         }
         .btn-outline:hover {
             border-color: var(--accent);
@@ -246,11 +286,13 @@
             font-size: 0.7rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
+            transition: color var(--transition);
         }
         .scroll-indicator .line {
             width: 1px;
             height: 40px;
-            background: linear-gradient(to bottom, var(--text-muted), transparent);
+            background: var(--scroll-line);
+            transition: background var(--transition);
         }
 
         /* ---- Sections ---- */
@@ -274,6 +316,7 @@
             font-weight: 700;
             letter-spacing: -0.02em;
             margin-bottom: 1rem;
+            transition: color var(--transition);
         }
 
         .section-sub {
@@ -281,6 +324,7 @@
             max-width: 600px;
             font-weight: 300;
             margin-bottom: 3rem;
+            transition: color var(--transition);
         }
 
         /* ---- About ---- */
@@ -295,6 +339,7 @@
             margin-bottom: 1rem;
             font-weight: 300;
             line-height: 1.8;
+            transition: color var(--transition);
         }
         .about-stats {
             display: grid;
@@ -302,10 +347,11 @@
             gap: 1.5rem;
         }
         .stat-card {
-            background: var(--surface);
+            background: var(--stat-bg);
             border-radius: var(--radius);
             padding: 1.5rem;
-            border: 1px solid rgba(255,255,255,0.04);
+            border: 1px solid var(--card-border);
+            transition: background var(--transition), border-color var(--transition);
         }
         .stat-card .number {
             font-size: 2.2rem;
@@ -317,6 +363,7 @@
             font-size: 0.85rem;
             color: var(--text-muted);
             margin-top: 0.4rem;
+            transition: color var(--transition);
         }
 
         @media (max-width: 768px) {
@@ -334,56 +381,59 @@
             background: var(--surface);
             border-radius: var(--radius);
             padding: 2rem;
-            border: 1px solid rgba(255,255,255,0.04);
-            transition: all 0.3s;
+            border: 1px solid var(--card-border);
+            transition: all 0.3s, background var(--transition), border-color var(--transition);
         }
         .activity-card:hover {
-            border-color: rgba(79, 124, 255, 0.2);
+            border-color: var(--card-hover-border);
             transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+            box-shadow: var(--shadow);
         }
-        .activity-card .icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
+        .activity-card .icon { font-size: 2rem; margin-bottom: 1rem; }
         .activity-card h3 {
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
+            transition: color var(--transition);
         }
         .activity-card p {
             font-size: 0.9rem;
             color: var(--text-muted);
             font-weight: 300;
+            transition: color var(--transition);
         }
 
         /* ---- Join ---- */
         .join-section {
-            background: var(--surface);
+            background: var(--join-section-bg);
             border-radius: var(--radius);
             padding: 4rem;
             text-align: center;
-            border: 1px solid rgba(79, 124, 255, 0.08);
+            border: 1px solid var(--join-border);
             position: relative;
             overflow: hidden;
+            transition: background var(--transition), border-color var(--transition);
         }
         .join-section::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 60%);
+            background: var(--join-glow);
             pointer-events: none;
+            transition: background var(--transition);
         }
         .join-section * { position: relative; z-index: 1; }
         .join-section h2 {
             font-size: clamp(1.6rem, 3vw, 2.2rem);
             margin-bottom: 1rem;
+            transition: color var(--transition);
         }
         .join-section p {
             color: var(--text-muted);
             max-width: 500px;
             margin: 0 auto 2rem;
             font-weight: 300;
+            transition: color var(--transition);
         }
 
         .contact-methods {
@@ -398,6 +448,8 @@
             align-items: center;
             gap: 0.5rem;
             font-size: 0.9rem;
+            color: var(--text-muted);
+            transition: color var(--transition);
         }
         .contact-item .emoji { font-size: 1.2rem; }
 
@@ -408,21 +460,32 @@
             color: var(--text-muted);
             font-size: 0.85rem;
             font-weight: 300;
-            border-top: 1px solid rgba(255,255,255,0.04);
+            border-top: 1px solid var(--footer-border);
             max-width: 1100px;
             margin: 0 auto;
+            transition: color var(--transition), border-color var(--transition);
         }
-        footer span { color: var(--accent); }
+        footer span:not([style]) { color: var(--accent); }
+        footer a {
+            transition: opacity 0.2s;
+        }
+        footer a:hover { opacity: 0.8; }
 
         /* ---- Fade-in ---- */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
+            transition: opacity 0.7s ease, transform 0.7s ease, background var(--transition), color var(--transition);
         }
         .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* ---- Theme transition helper ---- */
+        .theme-transitioning {
+            transition: background var(--transition), color var(--transition),
+                        border-color var(--transition), box-shadow var(--transition);
         }
     </style>
 </head>
@@ -544,7 +607,7 @@
         <h2 data-i18n="join.title">Ready to Speak?</h2>
         <p data-i18n="join.sub">
             No level requirements. Just bring yourself and a willingness to try.
-            We meet at Rm 3, 5F North Bldg.
+            We meet at Conference Rm 3, 5F North Bldg.
         </p>
         <a href="#" class="btn btn-primary" data-i18n="join.cta" data-i18n-alert="join.alert">Get in Touch →</a>
         <div class="contact-methods">
@@ -601,11 +664,11 @@
             'join.cta': 'Get in Touch \u2192',
             'join.location': 'Rm 3, 5F North Bldg',
             'join.alert': 'Search WeChat ID kiroyi_0511 to join the group!',
-            'nav.logo': 'ENGLISH <span>·</span> CLUB',
+            'nav.logo': 'ENGLISH <span>\u00b7</span> CLUB',
             'footer.made': 'Made with ',
             'footer.by': ' by Fushun No.1 Senior High English Club',
             'footer.copy': '\u00a9 2026 \u00b7 All rights reserved',
-            'footer.school': 'School Site →'
+            'footer.school': 'School Site \u2192'
         },
         zh: {
             'nav.about': '关于我们',
@@ -645,11 +708,11 @@
             'join.cta': '联系我们 \u2192',
             'join.location': '北楼五楼三号会议室',
             'join.alert': '搜索微信号 kiroyi_0511，拉你进群！',
-            'nav.logo': '英语 <span>·</span> 社团',
+            'nav.logo': '英语 <span>\u00b7</span> 社团',
             'footer.made': '',
             'footer.by': '抚顺市第一中学英语社团',
             'footer.copy': '\u00a9 2026 \u00b7 保留所有权利',
-            'footer.school': '学校官网 →'
+            'footer.school': '学校官网 \u2192'
         }
     };
 
@@ -660,6 +723,12 @@
         applyLang(currentLang);
         document.getElementById('langToggle').textContent = currentLang === 'en' ? '中文' : 'English';
         document.documentElement.lang = currentLang;
+        // Update school link text for light/dark consistency
+        updateSchoolLinkText(currentLang);
+    }
+
+    function updateSchoolLinkText() {
+        // English school site text already works via data-i18n
     }
 
     function applyLang(lang) {
@@ -670,7 +739,6 @@
                 el.innerHTML = dict[key];
             }
         });
-        // update alert popup on the CTA button
         const cta = document.querySelector('[data-i18n-alert]');
         if (cta) {
             cta.onclick = function(e) {
@@ -679,6 +747,84 @@
             };
         }
     }
+
+    // ===== Sunrise/Sunset Theme Auto-Switch =====
+    // Fushun, China coordinates: ~41.88°N, 123.92°E
+    // Uses solar position algorithm to compute sunrise/sunset
+
+    function calcSunriseSunset(date, lat, lng) {
+        // Radian helper
+        const rad = d => d * Math.PI / 180;
+        const deg = r => r * 180 / Math.PI;
+
+        const day = Math.floor(date.getTime() / 86400000);
+        const zenith = 90.833; // official sunrise: center of sun 50 arcmin below horizon + 34 arcmin refraction
+
+        // Julian day relative to Jan 1, 2000 12:00 UTC
+        const n = day - 2451545 + 0.0008;
+        const jStar = n - lng / 360;
+        const M = (357.5291 + 0.98560028 * jStar) % 360;
+        const C = 1.9148 * Math.sin(rad(M)) + 0.0200 * Math.sin(rad(2 * M)) + 0.0003 * Math.sin(rad(3 * M));
+        const lambda = (M + C + 180 + 102.9372) % 360;
+        const sinDec = Math.sin(rad(lambda)) * Math.sin(rad(23.4397));
+        const cosDec = Math.cos(Math.asin(sinDec));
+
+        const cosH = (Math.cos(rad(zenith)) - sinDec * Math.sin(rad(lat))) / (cosDec * Math.cos(rad(lat)));
+        if (cosH > 1 || cosH < -1) {
+            // Polar day/night — fallback to 6:00 / 18:00
+            return { sunrise: 6, sunset: 18 };
+        }
+        const H = Math.acos(cosH);
+        const Jtransit = 2451545 + 0.0008 + jStar + 0.0053 * Math.sin(rad(M)) - 0.0069 * Math.sin(rad(2 * lambda));
+        const Jset = Jtransit + deg(H) / 360;
+        const Jrise = Jtransit - deg(H) / 360;
+
+        const toHour = j => {
+            const utcHour = (j - Math.floor(j)) * 24;
+            const localHour = utcHour + 8; // Asia/Shanghai
+            return ((localHour % 24) + 24) % 24;
+        };
+
+        let sunrise = toHour(Jrise);
+        let sunset = toHour(Jset);
+        return { sunrise, sunset };
+    }
+
+    function getTheme() {
+        const now = new Date();
+        const localHour = now.getHours() + now.getMinutes() / 60;
+        const { sunrise, sunset } = calcSunriseSunset(now, 41.88, 123.92);
+        return (localHour >= sunrise && localHour < sunset) ? 'light' : 'dark';
+    }
+
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        // Save preference
+        try { localStorage.setItem('club-theme', theme); } catch(e) {}
+    }
+
+    function initTheme() {
+        // Check for manual override in localStorage
+        const saved = localStorage.getItem('club-theme');
+        let theme;
+        if (saved === 'light' || saved === 'dark') {
+            theme = saved;
+        } else {
+            theme = getTheme();
+        }
+        applyTheme(theme);
+
+        // Recalculate every 10 minutes
+        setInterval(() => {
+            const autoTheme = getTheme();
+            const saved = localStorage.getItem('club-theme');
+            if (saved !== 'light' && saved !== 'dark') {
+                applyTheme(autoTheme);
+            }
+        }, 600000);
+    }
+
+    initTheme();
 
     // ---- Fade-in on scroll ----
     const observer = new IntersectionObserver((entries) => {
@@ -703,9 +849,10 @@
     // ---- Nav background on scroll ----
     const nav = document.querySelector('nav');
     window.addEventListener('scroll', () => {
-        nav.style.borderBottomColor = window.scrollY > 60
-            ? 'rgba(255,255,255,0.06)'
-            : 'rgba(255,255,255,0.04)';
+        const isScrolled = window.scrollY > 60;
+        nav.style.borderBottomColor = isScrolled
+            ? 'var(--nav-border)'
+            : 'transparent';
     });
 </script>
 
