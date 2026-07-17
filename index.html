@@ -500,14 +500,14 @@
                         border-color var(--transition), box-shadow var(--transition);
         }
             .lang-fading {
-            filter: blur(6px);
-            opacity: 0;
-            transition: filter 0.2s ease, opacity 0.2s ease;
+            filter: blur(4px);
+            opacity: 0.4;
+            transition: filter 0.15s ease, opacity 0.15s ease;
         }
         .lang-fade-in {
             filter: blur(0);
             opacity: 1;
-            transition: filter 0.25s ease, opacity 0.25s ease;
+            transition: filter 0.3s ease, opacity 0.3s ease;
         }
     </style>
 </head>
@@ -742,22 +742,18 @@
 
     function toggleLang() {
         currentLang = currentLang === 'en' ? 'zh' : 'en';
-        const els = document.querySelectorAll('[data-i18n]');
-        els.forEach(el => {
-            el.classList.remove('lang-fade-in');
-            el.classList.add('lang-fading');
-        });
+        document.body.classList.remove('lang-fade-in');
+        document.body.classList.add('lang-fading');
+        document.getElementById('langToggle').style.transition = 'none';
         setTimeout(() => {
             applyLang(currentLang);
             document.getElementById('langToggle').textContent = currentLang === 'en' ? '中文' : 'English';
             document.documentElement.lang = currentLang;
             updateSchoolLinkText(currentLang);
-            document.getElementById('langToggle').classList.remove('lang-fading');
-            els.forEach(el => {
-                el.classList.remove('lang-fading');
-                el.classList.add('lang-fade-in');
-            });
-        }, 180);
+            document.getElementById('langToggle').style.transition = '';
+            document.body.classList.remove('lang-fading');
+            document.body.classList.add('lang-fade-in');
+        }, 200);
     }
 
     function updateSchoolLinkText() {
