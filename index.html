@@ -108,10 +108,17 @@
         nav .nav-inner {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 0.7rem 2rem;
+            padding: 0.7rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 1.25rem;
+        }
+
+        nav .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
         }
 
         nav .logo {
@@ -124,15 +131,10 @@
         }
         nav .logo span { color: var(--logo-dot); transition: color var(--transition); }
 
-        nav .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
         nav .nav-links {
             display: flex;
-            gap: 2rem;
+            align-items: center;
+            gap: 1.25rem;
             list-style: none;
         }
         nav .nav-links a {
@@ -170,7 +172,7 @@
 
         @media (max-width: 640px) {
             nav .nav-inner { padding: 0.75rem 1rem; }
-            .nav-left { gap: 0.75rem; }
+            .logo-wrapper { gap: 0.75rem; }
             nav .nav-links { gap: 0.75rem; }
             nav .nav-links a { font-size: 0.75rem; }
             .lang-toggle { font-size: 0.7rem; padding: 0.2rem 0.75rem; }
@@ -501,15 +503,15 @@
 
 <nav>
     <div class="nav-inner">
-        <div class="nav-left">
+        <div class="logo-wrapper">
             <div class="logo" data-i18n="nav.logo">ENGLISH <span>·</span> CLUB</div>
             <button class="lang-toggle" id="langToggle" onclick="toggleLang()">中文</button>
         </div>
-        <ul class="nav-links">
-            <li><a href="#about" data-i18n="nav.about">About</a></li>
-            <li><a href="#activities" data-i18n="nav.activities">Activities</a></li>
-            <li><a href="#join" data-i18n="nav.join">Join</a></li>
-        </ul>
+        <div class="nav-links">
+            <a href="#about" data-i18n="nav.about">About</a>
+            <a href="#activities" data-i18n="nav.activities">Activities</a>
+            <a href="#join" data-i18n="nav.join">Join</a>
+        </div>
     </div>
 </nav>
 
