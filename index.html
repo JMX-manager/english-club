@@ -259,8 +259,12 @@
             line-height: 1.1;
             max-width: 900px;
         }
-        html[lang="zh"] .hero h1 {
-            font-family: 'Noto Serif SC', 'PingFang SC', serif;
+        html[lang="zh"] {
+            --zh-serif: 'Noto Serif SC', 'PingFang SC', serif;
+        }
+        html[lang="zh"] .hero h1,
+        html[lang="zh"] .hero h1 .highlight {
+            font-family: var(--zh-serif) !important;
             font-size: clamp(3rem, 10vw, 5.5rem);
             font-weight: 700;
             letter-spacing: 0.08em;
