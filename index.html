@@ -333,10 +333,12 @@
         [data-theme="light"] .btn-outline {
             box-shadow: 0 0 0 1px rgba(0,0,0,0.03);
         }
-        .btn-outline:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            box-shadow: 0 0 0 1.5px var(--accent), 0 4px 20px rgba(79,124,255,0.2);
+        @media (hover: hover) {
+            .btn-outline:hover {
+                border-color: var(--accent);
+                color: var(--accent);
+                box-shadow: 0 0 0 1.5px var(--accent), 0 4px 20px rgba(79,124,255,0.2);
+            }
         }
         .btn-outline:active {
             animation: liquidPress 0.5s ease-out;
