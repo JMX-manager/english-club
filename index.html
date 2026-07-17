@@ -301,9 +301,7 @@
             cursor: pointer;
             border: none;
         }
-        .btn,
-        .btn-verify,
-        .lang-toggle {
+        a, button, .btn, .btn-verify, .lang-toggle, .footer-link-item, .email-text {
             -webkit-tap-highlight-color: transparent;
             outline: none;
         }
@@ -758,15 +756,7 @@
             letter-spacing: 0.01em;
             transition: color var(--transition);
         }
-        .footer-site {
-            font-size: 0.65rem;
-            font-weight: 400;
-            color: var(--accent);
-            text-decoration: none;
-            letter-spacing: 0.01em;
-            transition: opacity 0.2s;
-        }
-        .footer-site:hover { opacity: 0.75; }
+        
         .footer-sub {
             font-size: 0.6rem;
             font-weight: 300;
@@ -782,6 +772,36 @@
             letter-spacing: 0.02em;
             margin-top: 0.25rem;
             transition: color var(--transition);
+        }
+        .footer-links {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+        .footer-link-item {
+            font-size: 0.78rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            padding: 0.25rem 0.5rem;
+            border-radius: 100px;
+            transition: color 0.2s, background 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+        .footer-link-item:hover {
+            color: var(--accent);
+            background: rgba(79,124,255,0.05);
+        }
+        .footer-link-item:active {
+            animation: liquidPress 0.5s ease-out;
+            background: rgba(79,124,255,0.1);
+        }
+        .footer-sep {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            opacity: 0.3;
         }
 
         /* ---- Fade-in ---- */
@@ -951,7 +971,11 @@
     <div class="footer-content">
         <span class="footer-title" data-i18n="footer.title">抚顺市第一中学英语社团</span>
         <span class="footer-email" data-i18n="footer.email">问题反馈：qclaw.mx@foxmail.com</span>
-        <a href="http://m.lnfsyz.com/" target="_blank" class="footer-site" data-i18n="footer.site">抚顺一中官网 →</a>
+        <div class="footer-links">
+            <a href="#" onclick="event.preventDefault(); showDisclaimerModal()" class="footer-link-item" data-i18n="footer.disclaimer">免责声明</a>
+            <span class="footer-sep"> | </span>
+            <a href="http://m.lnfsyz.com/" target="_blank" class="footer-link-item" data-i18n="footer.site">抚顺一中官网 →</a>
+        </div>
         <span class="footer-sub" data-i18n="footer.host">项目托管于海外服务器</span>
         <span class="footer-sub" data-i18n="footer.rights">金明轩 保留所有权利</span>
         <span class="footer-copy" data-i18n="footer.copy">Copyright © 2026 Mr. Jin. All Rights Reserved.</span>
@@ -1005,7 +1029,11 @@
             'footer.email': 'Feedback: qclaw.mx@foxmail.com',
             'footer.host': 'Hosted on overseas server',
             'footer.rights': 'Jin Mingxuan All Rights Reserved',
-            'footer.copy': 'Copyright © 2026 Mr. Jin. All Rights Reserved.'
+            'footer.copy': 'Copyright © 2026 Mr. Jin. All Rights Reserved.',
+            'footer.disclaimer': 'Disclaimer',
+            'footer.sep': ' | ',
+            'disclaimer.title': 'Disclaimer',
+            'disclaimer.text': 'This project is independently developed by Jin Mingxuan. It is a pure front-end single-page application built with HTML, CSS, and vanilla JavaScript, hosted and maintained on GitHub Pages. By fully browsing this website, you acknowledge that you have read, understood, and agree to all the terms stated herein:\n\n1. The content of this site is for internal school reference only. No guarantees are made regarding its accuracy or completeness. Without permission from Fushun No.1 High School English Club and the project developer, reproduction, excerpting, or republication of any content is prohibited.\n\n2. This site is a static front-end page. It does not collect, store, or upload any visitor personal information or browsing history. The project developer shall not be held liable for website inaccessibility or link failures caused by platform changes, network issues, or force majeure.\n\n3. This site may modify, remove, or update page content and layout without prior notice. All actions taken by visitors based on the content of this site are at their own risk.\n\n4. The final right to interpret all content on this website belongs to the project developer.'
         },
         zh: {
             'nav.about': '关于我们',
@@ -1051,7 +1079,11 @@
             'footer.email': '问题反馈：qclaw.mx@foxmail.com',
             'footer.host': '项目托管于海外服务器',
             'footer.rights': '金明轩 保留所有权利',
-            'footer.copy': 'Copyright \u00a9 2026 Mr. Jin. All Rights Reserved.'
+            'footer.copy': 'Copyright \u00a9 2026 Mr. Jin. All Rights Reserved.',
+            'footer.disclaimer': '免责声明',
+            'footer.sep': ' | ',
+            'disclaimer.title': '免责声明',
+            'disclaimer.text': '本项目由金明轩独立开发，属于纯前端单页项目，采用 HTML、CSS、原生 JavaScript 搭建，依托 GitHub Pages 持续维护更新。您完整浏览本网站，即代表您已阅读、理解并同意本站全部声明条款：\n\n1、本站内容仅供校内交流参考，不对内容的准确性和完整性作出承诺；未经抚顺一中英语社与项目开发者许可，禁止转载、摘抄以及二次发布本站所有内容。\n\n2、本站为纯前端静态页面，不会采集、存储、上传任何访问者个人信息、浏览记录等隐私数据；若因平台调整、网络问题、不可抗力等情况造成网站无法访问、链接失效，项目开发者无需承担相关责任。\n\n3、本站可在不提前通知的情况下对页面内容与布局进行修改、删减和更新，访问者参考本站内容所产生的所有行为，全部由本人自行承担责任。\n\n4、本网站所有内容的最终解释权归项目开发者所有。'
         }
     };
 
@@ -1193,6 +1225,37 @@
         box.appendChild(title);
         box.appendChild(desc);
         box.appendChild(btnRow);
+        overlay.appendChild(box);
+        overlay.onclick = () => overlay.remove();
+        document.body.appendChild(overlay);
+    }
+
+    function showDisclaimerModal() {
+        const overlay = document.createElement('div');
+        overlay.className = 'verify-overlay';
+        const box = document.createElement('div');
+        box.className = 'verify-box';
+        const title = document.createElement('h3');
+        title.className = 'verify-title';
+        title.textContent = currentLang === 'en' ? 'Disclaimer' : '免责声明';
+        const desc = document.createElement('div');
+        desc.className = 'verify-desc';
+        desc.style.textAlign = 'left';
+        desc.style.fontSize = '0.78rem';
+        desc.style.lineHeight = '1.7';
+        desc.style.maxHeight = '50vh';
+        desc.style.overflowY = 'auto';
+        const dict = i18n[currentLang];
+        desc.innerHTML = (dict['disclaimer.text'] || '').replace(/\\n/g, '<br><br>');
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'verify-confirm';
+        closeBtn.style.marginTop = '1rem';
+        closeBtn.style.width = '100%';
+        closeBtn.textContent = currentLang === 'en' ? 'I Understand' : '我知道了';
+        closeBtn.onclick = function(e) { e.stopPropagation(); overlay.remove(); };
+        box.appendChild(title);
+        box.appendChild(desc);
+        box.appendChild(closeBtn);
         overlay.appendChild(box);
         overlay.onclick = () => overlay.remove();
         document.body.appendChild(overlay);
