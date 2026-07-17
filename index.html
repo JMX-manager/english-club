@@ -190,25 +190,11 @@
             pointer-events: none;
         }
         @keyframes liquidPress {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 4px 20px rgba(79, 124, 255, 0.3), 0 0 0 2px rgba(79,124,255,0.3);
-            }
-            20% {
-                transform: scale(0.94);
-                box-shadow: 0 2px 12px rgba(79, 124, 255, 0.3), 0 0 0 1.5px rgba(79,124,255,0.5);
-            }
-            45% {
-                transform: scale(1.06);
-                box-shadow: 0 8px 32px rgba(79, 124, 255, 0.4), 0 0 0 3px rgba(255,255,255,0.15);
-            }
-            60% {
-                transform: scale(0.96);
-            }
-            100% {
-                transform: scale(1);
-                box-shadow: none;
-            }
+            0% { transform: scale(1); }
+            20% { transform: scale(0.94); }
+            45% { transform: scale(1.06); }
+            60% { transform: scale(0.96); }
+            100% { transform: scale(1); }
         }
 
         @media (max-width: 640px) {
@@ -273,7 +259,7 @@
         html[lang="zh"] .hero h1,
         html[lang="zh"] .hero h1 .highlight {
             font-family: var(--zh-serif) !important;
-            font-size: clamp(2.6rem, 8vw, 4.5rem);
+            font-size: clamp(2.8rem, 8.5vw, 4.8rem);
             font-weight: 700;
             letter-spacing: 0.08em;
             line-height: 1.35;
