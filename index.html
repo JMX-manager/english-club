@@ -110,9 +110,20 @@
             margin: 0 auto;
             padding: 0.7rem 2rem;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 0.75rem;
+            position: relative;
+        }
+        nav .nav-links {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            list-style: none;
+        }
+        .lang-toggle {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         
@@ -127,12 +138,7 @@
         }
         nav .logo span { color: var(--logo-dot); transition: color var(--transition); }
 
-        nav .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
-            list-style: none;
-        }
+
         nav .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
@@ -158,6 +164,9 @@
             box-shadow: var(--toggle-shadow);
             backdrop-filter: blur(8px);
             flex-shrink: 0;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
         .lang-toggle:hover {
             background: linear-gradient(135deg, rgba(79, 124, 255, 1), rgba(79, 124, 255, 0.8));
