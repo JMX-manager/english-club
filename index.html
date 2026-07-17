@@ -757,11 +757,11 @@
         const rad = d => d * Math.PI / 180;
         const deg = r => r * 180 / Math.PI;
 
-        const day = Math.floor(date.getTime() / 86400000);
         const zenith = 90.833; // official sunrise: center of sun 50 arcmin below horizon + 34 arcmin refraction
 
         // Julian day relative to Jan 1, 2000 12:00 UTC
-        const n = day - 2451545 + 0.0008;
+        const julianDay = date.getTime() / 86400000 + 2440587.5;
+        const n = julianDay - 2451545 + 0.0008;
         const jStar = n - lng / 360;
         const M = (357.5291 + 0.98560028 * jStar) % 360;
         const C = 1.9148 * Math.sin(rad(M)) + 0.0200 * Math.sin(rad(2 * M)) + 0.0003 * Math.sin(rad(3 * M));
