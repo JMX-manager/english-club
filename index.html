@@ -112,13 +112,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 0.75rem;
         }
 
-        nav .logo-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 1.75rem;
-        }
+        
 
         nav .logo {
             font-weight: 600;
@@ -171,7 +168,7 @@
 
         @media (max-width: 640px) {
             nav .nav-inner { padding: 0.75rem 1rem; }
-            .logo-wrapper { gap: 0.75rem; }
+            
             nav .nav-links { gap: 0.75rem; }
             nav .nav-links a { font-size: 0.75rem; }
             .lang-toggle { font-size: 0.7rem; padding: 0.2rem 0.75rem; }
@@ -502,10 +499,8 @@
 
 <nav>
     <div class="nav-inner">
-        <div class="logo-wrapper">
-            <div class="logo" data-i18n="nav.logo">ENGLISH <span>·</span> CLUB</div>
-            <button class="lang-toggle" id="langToggle" onclick="toggleLang()">中文</button>
-        </div>
+        <div class="logo" data-i18n="nav.logo">ENGLISH <span>·</span> CLUB</div>
+        <button class="lang-toggle" id="langToggle" onclick="toggleLang()">中文</button>
         <div class="nav-links">
             <a href="#about" data-i18n="nav.about">About</a>
             <a href="#activities" data-i18n="nav.activities">Activities</a>
