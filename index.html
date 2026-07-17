@@ -137,9 +137,17 @@
             text-decoration: none;
             font-size: 0.875rem;
             font-weight: 500;
-            transition: color 0.2s;
+            transition: color 0.2s, background 0.2s;
+            padding: 0.3rem 0.8rem;
+            border-radius: 100px;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
         }
         nav .nav-links a:hover { color: var(--text); }
+        nav .nav-links a:active {
+            background: rgba(79,124,255,0.08);
+            color: var(--accent);
+        }
 
         /* ---- Lang Toggle ---- */
         .lang-toggle {
@@ -184,7 +192,7 @@
         @keyframes liquidPress {
             0% {
                 transform: scale(1);
-                box-shadow: 0 6px 28px rgba(79, 124, 255, 0.5), 0 0 0 2px rgba(79,124,255,0.3);
+                box-shadow: 0 4px 20px rgba(79, 124, 255, 0.3), 0 0 0 2px rgba(79,124,255,0.3);
             }
             20% {
                 transform: scale(0.94);
@@ -194,12 +202,12 @@
                 transform: scale(1.06);
                 box-shadow: 0 8px 32px rgba(79, 124, 255, 0.4), 0 0 0 3px rgba(255,255,255,0.15);
             }
-            70% {
-                transform: scale(0.98);
+            60% {
+                transform: scale(0.96);
             }
             100% {
                 transform: scale(1);
-                box-shadow: var(--toggle-shadow);
+                box-shadow: none;
             }
         }
 
