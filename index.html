@@ -145,7 +145,7 @@
         /* ---- Lang Toggle ---- */
         .lang-toggle {
             background: var(--toggle-bg);
-            border: 1px solid rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
             color: #fff;
             padding: 0.3rem 1rem;
             border-radius: 100px;
@@ -155,23 +155,53 @@
             transition: all 0.25s;
             font-family: inherit;
             letter-spacing: 0.04em;
-            box-shadow: var(--toggle-shadow);
+            box-shadow: var(--toggle-shadow),
+                        0 0 0 1px rgba(79,124,255,0.08);
             backdrop-filter: blur(8px);
             flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        [data-theme="light"] .lang-toggle {
+            border-color: rgba(0,0,0,0.08);
         }
         .lang-toggle:hover {
             background: linear-gradient(135deg, rgba(79, 124, 255, 1), rgba(79, 124, 255, 0.8));
             transform: scale(1.05);
-            box-shadow: 0 6px 28px rgba(79, 124, 255, 0.5);
+            box-shadow: 0 6px 28px rgba(79, 124, 255, 0.5), 0 0 0 1px rgba(79,124,255,0.15);
         }
         .lang-toggle:active {
-            animation: qBounce 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: liquidPress 0.5s ease-out;
         }
-        @keyframes qBounce {
-            0% { transform: scale(1); }
-            30% { transform: scale(0.92); }
-            60% { transform: scale(1.08); }
-            100% { transform: scale(1); }
+        .lang-toggle::before {
+            content: '';
+            position: absolute;
+            inset: -20%;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.25) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        @keyframes liquidPress {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 6px 28px rgba(79, 124, 255, 0.5), 0 0 0 2px rgba(79,124,255,0.3);
+            }
+            20% {
+                transform: scale(0.94);
+                box-shadow: 0 2px 12px rgba(79, 124, 255, 0.3), 0 0 0 1.5px rgba(79,124,255,0.5);
+            }
+            45% {
+                transform: scale(1.06);
+                box-shadow: 0 8px 32px rgba(79, 124, 255, 0.4), 0 0 0 3px rgba(255,255,255,0.15);
+            }
+            70% {
+                transform: scale(0.98);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: var(--toggle-shadow);
+            }
         }
 
         @media (max-width: 640px) {
