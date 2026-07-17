@@ -703,6 +703,14 @@
             from { opacity: 0; transform: scale(0.96); }
             to { opacity: 1; transform: scale(1); }
         }
+        @keyframes qrShrink {
+            0% { opacity: 1; transform: scale(1); filter: blur(0); }
+            60% { opacity: 0.5; transform: scale(0.85); filter: blur(2px); }
+            100% { opacity: 0; transform: scale(0.6); filter: blur(4px); }
+        }
+        .qr-overlay.qr-closing .qr-modal-img {
+            animation: qrShrink 0.25s ease-in forwards;
+        }
         .contact-item {
             display: flex;
             align-items: center;
@@ -1185,7 +1193,12 @@
     function showQR() {
         const overlay = document.createElement('div');
         overlay.className = 'qr-overlay';
-        overlay.onclick = () => overlay.remove();
+        overlay.onclick = (e) => {
+            if (e.target === overlay) {
+                overlay.classList.add('qr-closing');
+                setTimeout(() => overlay.remove(), 300);
+            }
+        };
         const card = document.createElement('div');
         card.className = 'qr-modal-card';
         const img = document.createElement('img');
