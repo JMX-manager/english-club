@@ -101,8 +101,8 @@
             top: 0; left: 0; right: 0;
             z-index: 100;
             background: var(--nav-bg);
-            backdrop-filter: saturate(180%) blur(30px);
-            -webkit-backdrop-filter: saturate(180%) blur(30px);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
             transition: background var(--transition);
         }
         nav::after {
@@ -968,6 +968,7 @@
 
     function toggleLang() {
         currentLang = currentLang === 'en' ? 'zh' : 'en';
+        const scrollY = window.scrollY;
         const wrapper = document.getElementById('page-content');
         wrapper.classList.remove('lang-fade-in');
         wrapper.classList.add('lang-fading');
@@ -978,6 +979,7 @@
             updateSchoolLinkText(currentLang);
             wrapper.classList.remove('lang-fading');
             wrapper.classList.add('lang-fade-in');
+            window.scrollTo(0, scrollY);
         }, 200);
     }
 
