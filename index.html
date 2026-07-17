@@ -1042,37 +1042,15 @@
 
     function applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
-        // Save preference
-        try { localStorage.setItem('club-theme', theme); } catch(e) {}
     }
 
-    const THEME_VERSION = 2;
-
     function initTheme() {
-        // Version check: invalidate cache from pre-fix algorithm
-        const saved = localStorage.getItem('club-theme');
-        const version = localStorage.getItem('club-theme-version');
-        let theme;
-        if ((saved === 'light' || saved === 'dark') && version == THEME_VERSION) {
-            theme = saved;
-        } else {
-            theme = getTheme();
-            localStorage.removeItem('club-theme');
-            localStorage.removeItem('club-theme-version');
-        }
-        applyTheme(theme);
-        try { localStorage.setItem('club-theme-version', THEME_VERSION); } catch(e) {}
+        applyTheme(getTheme());
 
-        // Recalculate every 10 minutes
+        // Recalculate every 3 minutes based on sun
         setInterval(() => {
-            const autoTheme = getTheme();
-            const saved = localStorage.getItem('club-theme');
-            const version = localStorage.getItem('club-theme-version');
-            if (saved !== 'light' && saved !== 'dark' || version != THEME_VERSION) {
-                applyTheme(autoTheme);
-                try { localStorage.setItem('club-theme-version', THEME_VERSION); } catch(e) {}
-            }
-        }, 600000);
+            applyTheme(getTheme());
+        }, 180000);
     }
 
     function showVerifyModal() {
