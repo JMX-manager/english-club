@@ -470,38 +470,150 @@
             transition: transform 0.25s ease;
         }
         .qr-img:hover { transform: scale(1.04); }
+        .email-text {
+            cursor: pointer;
+            transition: color 0.2s;
+            font-size: 0.95rem;
+        }
+        .email-text:hover { color: var(--accent); }
         .qr-hint {
             font-size: 0.78rem;
             color: var(--text-muted);
             text-align: center;
         }
+        .btn-verify {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.8rem;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            text-decoration: none;
+            transition: all 0.25s;
+            cursor: pointer;
+            border: 1px solid var(--btn-outline-border);
+            background: var(--surface);
+            color: var(--text);
+            margin-top: 0.25rem;
+        }
+        .btn-verify:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 12px rgba(79,124,255,0.15);
+        }
         .qr-overlay {
             position: fixed;
             inset: 0;
             z-index: 999;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(12px);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 1rem;
-            animation: fadeIn 0.25s ease;
+            animation: fadeIn 0.3s ease;
         }
         .qr-modal-img {
             width: 260px;
             height: 260px;
             border-radius: 16px;
-            box-shadow: 0 4px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15), 0 16px 48px rgba(0,0,0,0.25);
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: default;
         }
         .qr-modal-hint {
             font-size: 0.85rem;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.8);
             text-align: center;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+        .qr-modal-close {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+            text-align: center;
+            margin-top: -0.25rem;
+        }
+        .verify-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .verify-box {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            max-width: 380px;
+            width: 88%;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 16px 48px rgba(0,0,0,0.12);
+            border: 1px solid var(--card-border);
+            transition: background var(--transition);
+        }
+        .verify-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+        .verify-desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .verify-disclaimer {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            opacity: 0.65;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+        .verify-btns {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .verify-confirm {
+            padding: 0.65rem 1.5rem;
+            font-size: 0.88rem;
+            border: none;
+            cursor: pointer;
+            border-radius: 100px;
+            font-weight: 600;
+        }
+        .verify-cancel {
+            padding: 0.65rem 1.5rem;
+            font-size: 0.88rem;
+            border: 1px solid var(--btn-outline-border);
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 100px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .verify-cancel:hover {
+            border-color: var(--text-muted);
+            color: var(--text);
         }
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
         }
         .contact-item {
             display: flex;
@@ -683,13 +795,14 @@
             No level requirements. Just bring yourself and a willingness to try.
             We meet at Conference Rm 3, 5F North Bldg.
         </p>
-        <a href="#" class="btn btn-primary" onclick="event.preventDefault(); showQR()" data-i18n="join.cta2">Scan QR to Join →</a>
         <div class="contact-methods">
+            <span class="contact-item"><span class="emoji">📧</span> <span class="email-text" onclick="navigator.clipboard?.writeText('gclaw.mx@foxmail.com')">gclaw.mx@foxmail.com</span></span>
             <span class="contact-item"><span class="emoji">📍</span> <span data-i18n="join.location">Rm 3, 5F North Bldg</span></span>
         </div>
         <div class="qr-section">
-            <img src="assets/qr-group.jpg" alt="QR Code" class="qr-img" onclick="showQR()">
+            <img src="assets/qr-group.jpg" alt="QR Code" class="qr-img" id="qrImage">
             <span class="qr-hint" data-i18n="join.qrhint">Scan to join the group · Valid until Jul 24</span>
+            <a href="#" class="btn btn-verify" onclick="event.preventDefault(); showVerifyModal()" data-i18n="join.qrbtn">Show Group QR →</a>
         </div>
     </div>
 </section>
@@ -822,13 +935,7 @@
                 el.innerHTML = dict[key];
             }
         });
-        const ctaAlert = document.querySelector('[data-i18n-alert]');
-        if (ctaAlert) {
-            ctaAlert.onclick = function(e) {
-                e.preventDefault();
-                alert(dict['join.alert']);
-            };
-        }
+
     }
 
     // ===== Sunrise/Sunset Theme Auto-Switch =====
@@ -915,6 +1022,60 @@
         }, 600000);
     }
 
+    function showVerifyModal() {
+        const overlay = document.createElement('div');
+        overlay.className = 'verify-overlay';
+
+        const box = document.createElement('div');
+        box.className = 'verify-box';
+
+        const title = document.createElement('h3');
+        title.className = 'verify-title';
+        title.textContent = currentLang === 'en' ? 'Before You Join' : '加入前确认';
+
+        const desc = document.createElement('p');
+        desc.className = 'verify-desc';
+        desc.textContent = currentLang === 'en'
+            ? 'This group is primarily for students of Fushun No.1 Senior High. By proceeding, you confirm you are a member of our school community.'
+            : '本社团主要面向抚顺市第一中学在校师生。继续即表示您确认属于校内成员。';
+
+        const disclaimer = document.createElement('p');
+        disclaimer.className = 'verify-disclaimer';
+        disclaimer.textContent = currentLang === 'en'
+            ? 'External visitors are welcome, but please respect our community guidelines.'
+            : '校外访客也欢迎加入，请遵守社群规范。';
+
+        const btnRow = document.createElement('div');
+        btnRow.className = 'verify-btns';
+
+        const confirmBtn = document.createElement('button');
+        confirmBtn.className = 'btn btn-primary verify-confirm';
+        confirmBtn.textContent = currentLang === 'en' ? 'Confirm & Show QR' : '确认，查看二维码';
+        confirmBtn.onclick = function(e) {
+            e.stopPropagation();
+            overlay.remove();
+            showQR();
+        };
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.className = 'btn verify-cancel';
+        cancelBtn.textContent = currentLang === 'en' ? 'Cancel' : '取消';
+        cancelBtn.onclick = function(e) {
+            e.stopPropagation();
+            overlay.remove();
+        };
+
+        btnRow.appendChild(confirmBtn);
+        btnRow.appendChild(cancelBtn);
+        box.appendChild(title);
+        box.appendChild(desc);
+        box.appendChild(disclaimer);
+        box.appendChild(btnRow);
+        overlay.appendChild(box);
+        overlay.onclick = () => overlay.remove();
+        document.body.appendChild(overlay);
+    }
+
     function showQR() {
         const overlay = document.createElement('div');
         overlay.className = 'qr-overlay';
@@ -922,11 +1083,17 @@
         const img = document.createElement('img');
         img.src = 'assets/qr-group.jpg';
         img.className = 'qr-modal-img';
+        img.draggable = false;
+        img.style.touchAction = 'manipulation';
         const hint = document.createElement('p');
         hint.className = 'qr-modal-hint';
-        hint.textContent = currentLang === 'en' ? 'Scan to join · Valid until Jul 24' : '扫码入群 · 7月24日前有效';
+        hint.textContent = currentLang === 'en' ? 'Long press or scan to join · Valid until Jul 24' : '长按识别或扫码入群 · 7月24日前有效';
+        const closeHint = document.createElement('p');
+        closeHint.className = 'qr-modal-close';
+        closeHint.textContent = currentLang === 'en' ? 'Tap anywhere to close' : '点击任意位置关闭';
         overlay.appendChild(img);
         overlay.appendChild(hint);
+        overlay.appendChild(closeHint);
         document.body.appendChild(overlay);
     }
 
