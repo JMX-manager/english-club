@@ -1339,8 +1339,10 @@
     // ---- Long-press nav to scroll up ----
     let scrollRaf = null;
     let scrollStartTime = 0;
-    const ACCEL_TIME = 500;
-    const MAX_SPEED = 28;
+    let scrollActive = false;
+    const ACCEL_TIME = 300;
+    const MIN_SPEED = 15;
+    const MAX_SPEED = 40;
 
     function startScroll(e) {
         const target = e.target;
@@ -1348,13 +1350,16 @@
         if (target.closest('.logo, .lang-toggle, .nav-links a, .nav-links, .nav-right, a, button, .nav-link')) return;
         e.preventDefault();
         if (scrollRaf) return;
+        scrollActive = true;
         scrollStartTime = performance.now();
 
         function tick(now) {
+            if (!scrollActive) return;
             const elapsed = now - scrollStartTime;
             let speed;
             if (elapsed < ACCEL_TIME) {
-                speed = (elapsed / ACCEL_TIME) * MAX_SPEED;
+                const t = elapsed / ACCEL_TIME;
+                speed = MIN_SPEED + (MAX_SPEED - MIN_SPEED) * t;
             } else {
                 speed = MAX_SPEED;
             }
@@ -1365,6 +1370,7 @@
     }
 
     function stopScroll(e) {
+        scrollActive = false;
         if (scrollRaf) {
             cancelAnimationFrame(scrollRaf);
             scrollRaf = null;
