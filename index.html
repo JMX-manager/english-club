@@ -506,9 +506,6 @@
             position: fixed;
             inset: 0;
             z-index: 999;
-            background: rgba(0,0,0,0.25);
-            backdrop-filter: blur(30px) saturate(180%);
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -516,35 +513,46 @@
             gap: 1rem;
             animation: fadeIn 0.3s ease;
         }
+        [data-theme="dark"] .qr-overlay {
+            background: rgba(11, 13, 23, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+        }
+        [data-theme="light"] .qr-overlay {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+        }
         .qr-modal-card {
-            background: transparent;
-            border-radius: 28px;
-            padding: 0;
+            border-radius: 24px;
+            padding: 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+        }
+        [data-theme="dark"] .qr-modal-card {
+            background: #0b0d17;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.04),
+                        0 0 40px 8px rgba(79, 124, 255, 0.08);
+        }
+        [data-theme="light"] .qr-modal-card {
+            background: #ffffff;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.03),
+                        0 0 40px 8px rgba(79, 124, 255, 0.06);
         }
         .qr-modal-img {
             display: block;
             width: auto;
-            max-width: 65vw;
-            max-height: 55vh;
+            max-width: 60vw;
+            max-height: 50vh;
             height: auto;
             aspect-ratio: 1;
-            border-radius: 20px;
+            border-radius: 16px;
             -webkit-user-select: none;
             user-select: none;
             -webkit-touch-callout: default;
             object-fit: contain;
-            transition: box-shadow 0.3s;
-        }
-        [data-theme="dark"] .qr-modal-img {
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.04),
-                        0 8px 40px rgba(0,0,0,0.4);
-        }
-        [data-theme="light"] .qr-modal-img {
-            box-shadow: 0 0 0 1px rgba(0,0,0,0.03),
-                        0 8px 32px rgba(0,0,0,0.08);
         }
         .qr-modal-hint {
             font-size: 0.85rem;
