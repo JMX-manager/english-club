@@ -297,15 +297,23 @@
             cursor: pointer;
             border: none;
         }
+        .btn {
+            position: relative;
+            overflow: hidden;
+        }
         .btn-primary {
             background: var(--accent);
             color: #fff;
             box-shadow: 0 4px 20px rgba(79, 124, 255, 0.3);
+            transition: all 0.25s;
         }
         .btn-primary:hover {
             background: var(--accent-dark);
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(79, 124, 255, 0.4);
+            box-shadow: 0 4px 24px rgba(79, 124, 255, 0.5);
+        }
+        .btn-primary:active {
+            animation: liquidPress 0.5s ease-out;
         }
         .btn-outline {
             background: transparent;
@@ -316,6 +324,10 @@
         .btn-outline:hover {
             border-color: var(--accent);
             color: var(--accent);
+            box-shadow: 0 0 0 1px rgba(79,124,255,0.15);
+        }
+        .btn-outline:active {
+            animation: liquidPress 0.5s ease-out;
         }
 
         .scroll-indicator {
@@ -525,12 +537,17 @@
             background: var(--surface);
             color: var(--text);
             margin-top: 0.25rem;
+            position: relative;
+            overflow: hidden;
         }
         .btn-verify:hover {
             border-color: var(--accent);
             color: var(--accent);
             transform: translateY(-1px);
-            box-shadow: 0 2px 12px rgba(79,124,255,0.15);
+            box-shadow: 0 2px 16px rgba(79,124,255,0.2);
+        }
+        .btn-verify:active {
+            animation: liquidPress 0.5s ease-out;
         }
         .qr-overlay {
             position: fixed;
