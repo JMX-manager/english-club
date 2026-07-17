@@ -524,22 +524,10 @@
             -webkit-backdrop-filter: blur(20px) saturate(180%);
         }
         .qr-modal-card {
-            border-radius: 24px;
-            padding: 1.5rem;
+            border-radius: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-        }
-        [data-theme="dark"] .qr-modal-card {
-            background: #0b0d17;
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.04),
-                        0 0 40px 8px rgba(79, 124, 255, 0.08);
-        }
-        [data-theme="light"] .qr-modal-card {
-            background: #ffffff;
-            box-shadow: 0 0 0 1px rgba(0,0,0,0.03),
-                        0 0 40px 8px rgba(79, 124, 255, 0.06);
         }
         .qr-modal-img {
             display: block;
@@ -548,11 +536,19 @@
             max-height: 50vh;
             height: auto;
             aspect-ratio: 1;
-            border-radius: 16px;
+            border-radius: 20px;
             -webkit-user-select: none;
             user-select: none;
             -webkit-touch-callout: default;
             object-fit: contain;
+        }
+        [data-theme="dark"] .qr-modal-img {
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.06),
+                        0 0 60px 12px rgba(79, 124, 255, 0.1);
+        }
+        [data-theme="light"] .qr-modal-img {
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.03),
+                        0 0 60px 12px rgba(79, 124, 255, 0.07);
         }
         .qr-modal-hint {
             font-size: 0.85rem;
