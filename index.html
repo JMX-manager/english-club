@@ -1326,13 +1326,51 @@
     });
 
     // ---- Nav background on scroll ----
-    const nav = document.querySelector('nav');
+    const navEl = document.querySelector('nav');
     window.addEventListener('scroll', () => {
         const isScrolled = window.scrollY > 60;
-        nav.style.borderBottomColor = isScrolled
+        navEl.style.borderBottomColor = isScrolled
             ? 'var(--nav-border)'
             : 'transparent';
     });
+
+    // ---- Long-press nav to scroll up ----
+    let scrollRaf = null;
+    let scrollStartTime = 0;
+    const ACCEL_TIME = 800;
+    const MAX_SPEED = 12;
+
+    function startScroll(e) {
+        e.preventDefault();
+        if (scrollRaf) return;
+        scrollStartTime = performance.now();
+
+        function tick(now) {
+            const elapsed = now - scrollStartTime;
+            let speed;
+            if (elapsed < ACCEL_TIME) {
+                speed = (elapsed / ACCEL_TIME) * MAX_SPEED;
+            } else {
+                speed = MAX_SPEED;
+            }
+            window.scrollBy(0, -speed);
+            scrollRaf = requestAnimationFrame(tick);
+        }
+        scrollRaf = requestAnimationFrame(tick);
+    }
+
+    function stopScroll(e) {
+        if (scrollRaf) {
+            cancelAnimationFrame(scrollRaf);
+            scrollRaf = null;
+        }
+    }
+
+    navEl.addEventListener('mousedown', startScroll);
+    window.addEventListener('mouseup', stopScroll);
+    navEl.addEventListener('touchstart', startScroll, { passive: false });
+    window.addEventListener('touchend', stopScroll);
+    window.addEventListener('touchcancel', stopScroll);
 </script>
 
 </div>
