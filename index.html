@@ -454,6 +454,55 @@
             gap: 0.75rem;
             margin-top: 0.75rem;
         }
+        .qr-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .qr-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.1);
+            transition: transform 0.25s ease;
+        }
+        .qr-img:hover { transform: scale(1.04); }
+        .qr-hint {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        .qr-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            animation: fadeIn 0.25s ease;
+        }
+        .qr-modal-img {
+            width: 260px;
+            height: 260px;
+            border-radius: 16px;
+            box-shadow: 0 4px 40px rgba(0,0,0,0.3);
+        }
+        .qr-modal-hint {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
         .contact-item {
             display: flex;
             align-items: center;
@@ -634,10 +683,13 @@
             No level requirements. Just bring yourself and a willingness to try.
             We meet at Conference Rm 3, 5F North Bldg.
         </p>
-        <a href="#" class="btn btn-primary" data-i18n="join.cta" data-i18n-alert="join.alert">Get in Touch →</a>
+        <a href="#" class="btn btn-primary" onclick="event.preventDefault(); showQR()" data-i18n="join.cta2">Scan QR to Join →</a>
         <div class="contact-methods">
-            <span class="contact-item"><span class="emoji">📱</span> WeChat: kiroyi_0511</span>
             <span class="contact-item"><span class="emoji">📍</span> <span data-i18n="join.location">Rm 3, 5F North Bldg</span></span>
+        </div>
+        <div class="qr-section">
+            <img src="assets/qr-group.jpg" alt="QR Code" class="qr-img" onclick="showQR()">
+            <span class="qr-hint" data-i18n="join.qrhint">Scan to join the group · Valid until Jul 24</span>
         </div>
     </div>
 </section>
@@ -688,7 +740,7 @@
             'join.sub': 'No level requirements. Just bring yourself and a willingness to try. We meet at Conference Rm 3, 5F North Bldg.',
             'join.cta': 'Get in Touch \u2192',
             'join.location': 'Rm 3, 5F North Bldg',
-            'join.alert': 'Search WeChat ID kiroyi_0511 to join the group!',
+            'join.alert': 'Scan the QR code to join the WeChat group!',
             'nav.logo': 'ENGLISH <span>\u00b7</span> CLUB',
             'footer.made': 'Made with ',
             'footer.by': ' by Fushun No.1 Senior High English Club',
@@ -732,7 +784,7 @@
             'join.sub': '没有水平要求。带上你自己和一颗愿意尝试的心。地点在北楼五楼三号会议室。',
             'join.cta': '联系我们 \u2192',
             'join.location': '北楼五楼三号会议室',
-            'join.alert': '搜索微信号 kiroyi_0511，拉你进群！',
+            'join.alert': '扫描二维码加入微信群！',
             'nav.logo': '英语 <span>\u00b7</span> 社团',
             'footer.made': '',
             'footer.by': '抚顺市第一中学英语社团',
@@ -770,9 +822,9 @@
                 el.innerHTML = dict[key];
             }
         });
-        const cta = document.querySelector('[data-i18n-alert]');
-        if (cta) {
-            cta.onclick = function(e) {
+        const ctaAlert = document.querySelector('[data-i18n-alert]');
+        if (ctaAlert) {
+            ctaAlert.onclick = function(e) {
                 e.preventDefault();
                 alert(dict['join.alert']);
             };
@@ -861,6 +913,21 @@
                 try { localStorage.setItem('club-theme-version', THEME_VERSION); } catch(e) {}
             }
         }, 600000);
+    }
+
+    function showQR() {
+        const overlay = document.createElement('div');
+        overlay.className = 'qr-overlay';
+        overlay.onclick = () => overlay.remove();
+        const img = document.createElement('img');
+        img.src = 'assets/qr-group.jpg';
+        img.className = 'qr-modal-img';
+        const hint = document.createElement('p');
+        hint.className = 'qr-modal-hint';
+        hint.textContent = currentLang === 'en' ? 'Scan to join · Valid until Jul 24' : '扫码入群 · 7月24日前有效';
+        overlay.appendChild(img);
+        overlay.appendChild(hint);
+        document.body.appendChild(overlay);
     }
 
     initTheme();
