@@ -26,8 +26,8 @@
             --surface-2: #1a1e3e;
             --text: #e8ecf4;
             --text-muted: #8892b0;
-            --nav-bg: rgba(11, 13, 23, 0.06);
-            --nav-border: rgba(255,255,255,0.02);
+            --nav-bg: rgba(11, 13, 23, 0.12);
+            --nav-border: rgba(255,255,255,0.06);
             --card-border: rgba(255,255,255,0.02);
             --join-border: rgba(79,124,255,0.08);
             --btn-outline-border: rgba(255,255,255,0.12);
@@ -53,8 +53,8 @@
             --surface-2: #ebeef5;
             --text: #1a1d2e;
             --text-muted: #6b7280;
-            --nav-bg: rgba(255, 255, 255, 0.08);
-            --nav-border: rgba(0,0,0,0.03);
+            --nav-bg: rgba(255, 255, 255, 0.15);
+            --nav-border: rgba(0,0,0,0.06);
             --card-border: rgba(0,0,0,0.03);
             --join-border: rgba(79,124,255,0.15);
             --btn-outline-border: rgba(0,0,0,0.10);
@@ -101,10 +101,16 @@
             top: 0; left: 0; right: 0;
             z-index: 100;
             background: var(--nav-bg);
-            backdrop-filter: blur(80px) saturate(250%);
-            -webkit-backdrop-filter: blur(80px) saturate(250%);
-            border-bottom: 1px solid var(--nav-border);
+            backdrop-filter: saturate(180%) blur(30px);
+            -webkit-backdrop-filter: saturate(180%) blur(30px);
             transition: background var(--transition);
+        }
+        nav::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 1px;
+            background: var(--nav-border);
         }
         nav .nav-inner {
             max-width: 1100px;
