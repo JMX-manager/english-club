@@ -642,28 +642,51 @@
             margin: 0 auto;
             transition: border-color var(--transition);
         }
-        .footer-lines {
+        .footer-content {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.65rem;
+            gap: 1rem;
         }
-        .footer-lines span {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            font-weight: 350;
-            letter-spacing: 0.02em;
-            line-height: 1.5;
+        .footer-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 0.03em;
+            transition: color var(--transition);
         }
-        .footer-lines a {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            font-weight: 350;
+        .footer-email {
+            font-size: 0.85rem;
+            font-weight: 450;
+            color: var(--text);
+            letter-spacing: 0.01em;
+            transition: color var(--transition);
+        }
+        .footer-site {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--accent);
             text-decoration: none;
-            letter-spacing: 0.02em;
+            letter-spacing: 0.01em;
             transition: opacity 0.2s;
         }
-        .footer-lines a:hover { opacity: 0.7; color: var(--accent); }
+        .footer-site:hover { opacity: 0.75; }
+        .footer-sub {
+            font-size: 0.78rem;
+            font-weight: 350;
+            color: var(--text-muted);
+            letter-spacing: 0.02em;
+            transition: color var(--transition);
+        }
+        .footer-copy {
+            font-size: 0.72rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            opacity: 0.65;
+            letter-spacing: 0.02em;
+            margin-top: 0.25rem;
+            transition: color var(--transition);
+        }
 
         /* ---- Fade-in ---- */
         .nowrap { white-space: nowrap; }
@@ -828,13 +851,13 @@
 </section>
 
 <footer>
-    <div class="footer-lines">
-        <span>抚顺市第一中学英语社团</span>
-        <span>问题反馈：qclaw.mx@foxmail.com</span>
-        <a href="http://m.lnfsyz.com/" target="_blank" class="footer-link">抚顺一中官网 →</a>
-        <span>站点托管于海外服务器</span>
-        <span>金明轩 保留所有权利</span>
-        <span>Copyright © 2026 Mr. Jin. All Rights Reserved.</span>
+    <div class="footer-content">
+        <span class="footer-title" data-i18n="footer.title">抚顺市第一中学英语社团</span>
+        <span class="footer-email" data-i18n="footer.email">问题反馈：qclaw.mx@foxmail.com</span>
+        <a href="http://m.lnfsyz.com/" target="_blank" class="footer-site" data-i18n="footer.site">抚顺一中官网 →</a>
+        <span class="footer-sub" data-i18n="footer.host">站点托管于海外服务器</span>
+        <span class="footer-sub" data-i18n="footer.rights">金明轩 保留所有权利</span>
+        <span class="footer-copy" data-i18n="footer.copy">Copyright © 2026 Mr. Jin. All Rights Reserved.</span>
     </div>
 </footer>
 
