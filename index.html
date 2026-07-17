@@ -528,6 +528,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            padding: 0;
         }
         .qr-modal-img {
             display: block;
@@ -541,9 +543,20 @@
             user-select: none;
             -webkit-touch-callout: default;
             object-fit: contain;
-            -webkit-mask-image: radial-gradient(circle at center, black 58%, transparent 80%);
-            mask-image: radial-gradient(circle at center, black 58%, transparent 80%);
-            border-radius: 8px;
+        }
+        .qr-modal-card::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 18px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        [data-theme="dark"] .qr-modal-card::after {
+            background: radial-gradient(circle at center, transparent 50%, rgba(11,13,23,0.85) 78%);
+        }
+        [data-theme="light"] .qr-modal-card::after {
+            background: radial-gradient(circle at center, transparent 50%, rgba(255,255,255,0.85) 78%);
         }
         [data-theme="dark"] .qr-modal-img {
             box-shadow: 0 0 0 1px rgba(255,255,255,0.06),
