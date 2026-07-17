@@ -525,6 +525,8 @@
     </div>
 </nav>
 
+<div id="page-content">
+
 <!-- Hero -->
 <section class="hero">
     <div class="hero-glow"></div>
@@ -742,17 +744,16 @@
 
     function toggleLang() {
         currentLang = currentLang === 'en' ? 'zh' : 'en';
-        document.body.classList.remove('lang-fade-in');
-        document.body.classList.add('lang-fading');
-        document.getElementById('langToggle').style.transition = 'none';
+        const wrapper = document.getElementById('page-content');
+        wrapper.classList.remove('lang-fade-in');
+        wrapper.classList.add('lang-fading');
         setTimeout(() => {
             applyLang(currentLang);
             document.getElementById('langToggle').textContent = currentLang === 'en' ? '中文' : 'English';
             document.documentElement.lang = currentLang;
             updateSchoolLinkText(currentLang);
-            document.getElementById('langToggle').style.transition = '';
-            document.body.classList.remove('lang-fading');
-            document.body.classList.add('lang-fade-in');
+            wrapper.classList.remove('lang-fading');
+            wrapper.classList.add('lang-fade-in');
         }, 200);
     }
 
@@ -896,5 +897,6 @@
     });
 </script>
 
+</div>
 </body>
 </html>
