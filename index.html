@@ -517,9 +517,9 @@
             position: fixed;
             inset: 0;
             z-index: 999;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(40px) saturate(200%);
-            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -527,20 +527,20 @@
             gap: 1rem;
             animation: fadeIn 0.3s ease;
         }
-        .qr-modal-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
+        .qr-modal-card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1), 0 16px 48px rgba(0,0,0,0.2);
         }
         .qr-modal-img {
+            display: block;
             width: auto;
-            max-width: 80vw;
-            max-height: 65vh;
+            max-width: 70vw;
+            max-height: 55vh;
             height: auto;
             aspect-ratio: 1;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15), 0 16px 48px rgba(0,0,0,0.25);
+            border-radius: 12px;
             -webkit-user-select: none;
             user-select: none;
             -webkit-touch-callout: default;
@@ -552,6 +552,10 @@
             text-align: center;
             font-weight: 400;
             letter-spacing: 0.02em;
+        }
+        .qr-modal-card {
+            background: var(--surface);
+            border: 1px solid var(--card-border);
         }
         .qr-modal-close {
             font-size: 0.75rem;
@@ -822,7 +826,7 @@
             <span class="contact-item"><span class="emoji">📍</span> <span data-i18n="join.location">Rm 3, 5F North Bldg</span></span>
         </div>
         <div class="qr-section">
-            <p class="qr-intro" data-i18n="join.qrintro">This club welcomes Fushun No.1 students. Verify your identity to access the group QR code.</p>
+            <p class="qr-intro" data-i18n="join.qrintro">This group is for Fushun No.1 students. Verify your identity to access the group QR code.</p>
             <a href="#" class="btn btn-verify" onclick="event.preventDefault(); showVerifyModal()" data-i18n="join.qrbtn">Verify & View QR →</a>
         </div>
     </div>
@@ -921,7 +925,7 @@
             'join.cta': '联系我们 \u2192',
             'join.location': '北楼五楼三号会议室',
             'join.qrbtn': '验证身份并查看二维码 →',
-            'join.qrintro': '本群仅面向抚顺一中在校师生。验证身份后可查看群二维码。',
+            'join.qrintro': '本群面向抚顺一中在校学生。验证身份后可查看群二维码。',
             'join.alert': '扫描二维码加入微信群！',
             'nav.logo': '英语 <span>\u00b7</span> 社团',
             'footer.made': '',
@@ -1061,8 +1065,8 @@
         const desc = document.createElement('p');
         desc.className = 'verify-desc';
         desc.textContent = currentLang === 'en'
-            ? 'This group is for students of Fushun No.1 Senior High. Please confirm you are a member of our school to access the group QR code.'
-            : '本群仅面向抚顺市第一中学在校师生开放。请确认您的校内身份后查看群二维码。';
+            ? 'This group is for students of Fushun No.1 Senior High. Please confirm your identity to access the group QR code.'
+            : '本群仅面向抚顺一中在校学生开放。请确认您的身份后查看群二维码。';
 
         const btnRow = document.createElement('div');
         btnRow.className = 'verify-btns';
@@ -1098,8 +1102,8 @@
         const overlay = document.createElement('div');
         overlay.className = 'qr-overlay';
         overlay.onclick = () => overlay.remove();
-        const container = document.createElement('div');
-        container.className = 'qr-modal-container';
+        const card = document.createElement('div');
+        card.className = 'qr-modal-card';
         const img = document.createElement('img');
         img.src = 'assets/qr-group.jpg';
         img.className = 'qr-modal-img';
@@ -1116,8 +1120,8 @@
         const closeHint = document.createElement('p');
         closeHint.className = 'qr-modal-close';
         closeHint.textContent = currentLang === 'en' ? 'Tap anywhere to close' : '点击任意位置关闭';
-        container.appendChild(img);
-        overlay.appendChild(container);
+        card.appendChild(img);
+        overlay.appendChild(card);
         overlay.appendChild(hint);
         overlay.appendChild(closeHint);
         document.body.appendChild(overlay);
