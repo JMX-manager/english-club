@@ -533,18 +533,23 @@
             text-decoration: none;
             transition: all 0.25s;
             cursor: pointer;
-            border: 1px solid var(--btn-outline-border);
+            border: 1px solid rgba(79,124,255,0.15);
             background: var(--surface);
             color: var(--text);
             margin-top: 0.25rem;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 0 0 1px rgba(79,124,255,0.06);
+        }
+        [data-theme="light"] .btn-verify {
+            border-color: rgba(0,0,0,0.08);
+            box-shadow: none;
         }
         .btn-verify:hover {
             border-color: var(--accent);
             color: var(--accent);
             transform: translateY(-1px);
-            box-shadow: 0 2px 16px rgba(79,124,255,0.2);
+            box-shadow: 0 0 0 1.5px var(--accent), 0 4px 20px rgba(79,124,255,0.25);
         }
         .btn-verify:active {
             animation: liquidPress 0.5s ease-out;
