@@ -72,8 +72,9 @@
             --card-hover-border: rgba(79, 124, 255, 0.25);
         }
 
-        html { scroll-behavior: smooth; overflow-x: hidden; }
-        body { overflow-x: hidden; }
+        html { scroll-behavior: smooth; overflow-x: hidden; overscroll-behavior-y: auto; }
+        body { overflow-x: hidden; min-height: 100vh; }
+        #page-content { overscroll-behavior-y: auto; }
 
         body {
             font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
@@ -699,12 +700,18 @@
 
         .fade-in {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.7s ease, transform 0.7s ease, background var(--transition), color var(--transition);
+            transform: translateY(36px) scale(0.98);
+            filter: blur(3px);
+            transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                        filter 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                        background var(--transition),
+                        color var(--transition);
         }
         .fade-in.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
+            filter: blur(0);
         }
 
         /* ---- Theme transition helper ---- */
@@ -1168,9 +1175,11 @@
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+            } else {
+                entry.target.classList.remove('visible');
             }
         });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.12 });
 
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
