@@ -471,6 +471,15 @@
             transform: scale(0.98);
             transition-duration: 0.1s;
         }
+        [data-theme="dark"] .stat-card:active {
+            box-shadow: 0 0 0 1px rgba(79,124,255,0.2), 0 0 30px rgba(79,124,255,0.15), 0 0 60px rgba(79,124,255,0.05), var(--card-shadow-hover);
+        }
+        [data-theme="dark"] .stat-card:active .number {
+            text-shadow: 0 0 16px rgba(79,124,255,0.5);
+        }
+        [data-theme="dark"] .stat-card:active .label {
+            color: var(--accent);
+        }
         .stat-card .number {
             font-size: 2.2rem;
             font-weight: 800;
@@ -570,9 +579,16 @@
             transform: scale3d(0.97, 0.97, 1) !important;
             transition: transform 0.08s ease !important;
         }
+        [data-theme="dark"] .activity-card:active {
+            box-shadow: 0 0 0 1px rgba(79,124,255,0.2), 0 0 30px rgba(79,124,255,0.15), 0 0 60px rgba(79,124,255,0.05), var(--card-shadow-hover);
+            filter: brightness(1.05);
+        }
         .activity-card:active .icon {
             transform: scale3d(0.92, 0.92, 1) rotate(-2deg);
             transition: transform 0.12s ease;
+        }
+        [data-theme="dark"] .activity-card:active .icon {
+            filter: brightness(1.4) drop-shadow(0 0 10px rgba(79,124,255,0.4));
         }
 
         /* ---- Join ---- */
@@ -702,8 +718,8 @@
             -webkit-touch-callout: default;
         }
         [data-theme="dark"] .qr-modal-img {
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.06),
-                        0 0 60px 12px rgba(79, 124, 255, 0.1);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.04),
+                        0 0 30px 8px rgba(79, 124, 255, 0.04);
         }
         [data-theme="light"] .qr-modal-img {
             box-shadow: 0 0 0 1px rgba(0,0,0,0.03),
@@ -773,7 +789,7 @@
             pointer-events: none;
         }
         [data-theme="dark"] .verify-box::after {
-            background: radial-gradient(circle at 30% 20%, rgba(79,124,255,0.05), transparent 60%);
+            background: radial-gradient(circle at 30% 20%, rgba(79,124,255,0.02), transparent 60%);
         }
         [data-theme="light"] .verify-box {
             background: #fff;
