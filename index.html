@@ -740,18 +740,30 @@
             animation: fadeIn 0.3s ease;
         }
         .verify-box {
-            background: rgba(255, 255, 255, 0.08);
+            background: #fff;
             border-radius: 20px;
             padding: 2.5rem 2rem;
             max-width: 380px;
             width: 88%;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 16px 48px rgba(0,0,0,0.12);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 16px 48px rgba(0,0,0,0.12),
+                        0 0 80px rgba(79,124,255,0.08), inset 0 1px 0 rgba(255,255,255,0.8);
             border: 1px solid var(--card-border);
-            transition: background var(--transition);
+        }
+        .verify-box::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 20%, rgba(79,124,255,0.06), transparent 60%);
+            pointer-events: none;
         }
         [data-theme="light"] .verify-box {
-            background: rgba(255, 255, 255, 0.5);
+            background: #fff;
         }
         .verify-title {
             font-size: 1.3rem;
