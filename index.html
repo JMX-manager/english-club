@@ -473,11 +473,11 @@
         }
         [data-theme="dark"] .stat-card:active,
         [data-theme="dark"] .stat-card.card-glow {
-            box-shadow: 0 0 0 1px rgba(79,124,255,0.2), 0 0 30px rgba(79,124,255,0.15), 0 0 60px rgba(79,124,255,0.05), var(--card-shadow-hover);
+            box-shadow: 0 0 0 1px rgba(79,124,255,0.15), 0 0 40px rgba(79,124,255,0.08), var(--card-shadow-hover);
         }
         [data-theme="dark"] .stat-card:active .number,
         [data-theme="dark"] .stat-card.card-glow .number {
-            text-shadow: 0 0 16px rgba(79,124,255,0.5);
+            text-shadow: 0 0 12px rgba(79,124,255,0.3);
         }
         [data-theme="dark"] .stat-card:active .label,
         [data-theme="dark"] .stat-card.card-glow .label {
@@ -584,8 +584,8 @@
         }
         [data-theme="dark"] .activity-card:active,
         [data-theme="dark"] .activity-card.card-glow {
-            box-shadow: 0 0 0 1px rgba(79,124,255,0.2), 0 0 30px rgba(79,124,255,0.15), 0 0 60px rgba(79,124,255,0.05), var(--card-shadow-hover);
-            filter: brightness(1.05);
+            box-shadow: 0 0 0 1px rgba(79,124,255,0.15), 0 0 40px rgba(79,124,255,0.08), var(--card-shadow-hover);
+            filter: brightness(1.03);
         }
         .activity-card:active .icon {
             transform: scale3d(0.92, 0.92, 1) rotate(-2deg);
@@ -593,7 +593,7 @@
         }
         [data-theme="dark"] .activity-card:active .icon,
         [data-theme="dark"] .activity-card.card-glow .icon {
-            filter: brightness(1.4) drop-shadow(0 0 10px rgba(79,124,255,0.4));
+            filter: brightness(1.2);
         }
 
         /* ---- Join ---- */
@@ -833,6 +833,10 @@
         [data-theme="dark"] .verify-confirm {
             background: var(--accent);
             color: #fff;
+        }
+        .verify-confirm:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 0 0 1px rgba(79,124,255,0.2), 0 0 30px rgba(79,124,255,0.1);
         }
         .verify-confirm:active {
             animation: liquidPress 0.5s ease-out;
@@ -1452,7 +1456,7 @@
     
     // ---- Persistent card glow on click ----
     (function() {
-        const glowCards = document.querySelectorAll('.activity-card, .stat-card');
+        var glowCards = document.querySelectorAll('.activity-card, .stat-card');
         glowCards.forEach(function(card) {
             card.addEventListener('click', function(e) {
                 e.stopPropagation();
@@ -1465,8 +1469,37 @@
                 glowCards.forEach(function(c) { c.classList.remove('card-glow'); });
             }
         });
+    })();
+
+
+    // ---- Fling-to-top: reset fade-in with blur ----
+    (function() {
+        var lastY = 0, scrollTimer = null;
         window.addEventListener('scroll', function() {
-            glowCards.forEach(function(c) { c.classList.remove('card-glow'); });
+            var vy = lastY - window.scrollY;
+            lastY = window.scrollY;
+            if (scrollTimer) clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(function() { vy = 0; }, 100);
+            if (window.scrollY <= 5 && vy > 25) {
+                var content = document.getElementById('page-content');
+                if (!content) return;
+                content.style.transition = 'filter 0.35s ease, -webkit-filter 0.35s ease';
+                content.style.filter = 'blur(5px)';
+                content.style.webkitFilter = 'blur(5px)';
+                setTimeout(function() {
+                    document.querySelectorAll('.fade-in.visible').forEach(function(el) {
+                        el.classList.remove('visible');
+                    });
+                    void content.offsetHeight;
+                    document.querySelectorAll('.fade-in').forEach(function(el) {
+                        el.classList.add('visible');
+                    });
+                }, 200);
+                setTimeout(function() {
+                    content.style.filter = '';
+                    content.style.webkitFilter = '';
+                }, 550);
+            }
         }, { passive: true });
     })();
 
