@@ -935,29 +935,16 @@
             opacity: 1;
             transition: filter 0.3s ease, opacity 0.3s ease;
         }
-
-        /* ---- Card click Q弹 animation ---- */
-        @keyframes cardBounce {
+            .card-press {
+            animation: cardPress 0.25s ease;
+        }
+        @keyframes cardPress {
             0%   { transform: scale3d(1, 1, 1); }
-            20%  { transform: scale3d(0.93, 0.93, 1); }
-            45%  { transform: scale3d(1.04, 1.04, 1); }
-            70%  { transform: scale3d(0.97, 0.97, 1); }
+            40%  { transform: scale3d(0.97, 0.97, 1); }
+            70%  { transform: scale3d(1.01, 1.01, 1); }
             100% { transform: scale3d(1, 1, 1); }
         }
-        @keyframes iconBounce {
-            0%   { transform: scale3d(1, 1, 1) rotate(0deg); }
-            15%  { transform: scale3d(1.25, 1.25, 1) rotate(-5deg); }
-            40%  { transform: scale3d(1.1, 1.1, 1) rotate(3deg); }
-            65%  { transform: scale3d(1.18, 1.18, 1) rotate(-2deg); }
-            100% { transform: scale3d(1, 1, 1) rotate(0deg); }
-        }
-        .card-clicked {
-            animation: cardBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-        }
-        .card-clicked .icon {
-            animation: iconBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-        }
-    </style>
+</style>
 </head>
 <body>
 
@@ -1446,19 +1433,17 @@
             : 'transparent';
     });
 
-
-    // ---- Activity card Q弹 click ----
+    // ---- Activity card click press ----
     document.querySelectorAll('.activity-card').forEach(card => {
-        card.addEventListener('click', function(e) {
-            this.classList.remove('card-clicked');
+        card.addEventListener('click', function() {
+            this.classList.remove('card-press');
             void this.offsetWidth;
-            this.classList.add('card-clicked');
+            this.classList.add('card-press');
         });
     });
     document.querySelectorAll('.activity-card').forEach(card => {
-        card.addEventListener('animationend', function(e) {
-            if (e.target === this || e.target.classList.contains('icon'))
-                this.classList.remove('card-clicked');
+        card.addEventListener('animationend', function() {
+            this.classList.remove('card-press');
         });
     });
 </script>
