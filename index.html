@@ -733,9 +733,9 @@
             position: fixed;
             inset: 0;
             z-index: 999;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(40px) saturate(200%);
-            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(6px) saturate(150%);
+            -webkit-backdrop-filter: blur(6px) saturate(150%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -743,6 +743,8 @@
         }
         .verify-box {
             background: var(--surface);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
             border-radius: 20px;
             padding: 2.5rem 2rem;
             max-width: 380px;
@@ -791,7 +793,7 @@
             font-size: 0.88rem;
             border: 1px solid rgba(79,124,255,0.2);
             background: transparent;
-            color: var(--text-muted);
+            color: var(--text);
             cursor: pointer;
             border-radius: 100px;
             font-weight: 500;
