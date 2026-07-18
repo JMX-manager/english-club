@@ -938,11 +938,20 @@
             .card-press {
             animation: cardPress 0.25s ease;
         }
+        .card-press .icon {
+            animation: iconPress 0.3s ease;
+        }
         @keyframes cardPress {
             0%   { transform: scale3d(1, 1, 1); }
             40%  { transform: scale3d(0.97, 0.97, 1); }
             70%  { transform: scale3d(1.01, 1.01, 1); }
             100% { transform: scale3d(1, 1, 1); }
+        }
+        @keyframes iconPress {
+            0%   { transform: scale3d(1, 1, 1) rotate(0deg); }
+            40%  { transform: scale3d(0.92, 0.92, 1) rotate(-2deg); }
+            70%  { transform: scale3d(1.06, 1.06, 1) rotate(2deg); }
+            100% { transform: scale3d(1, 1, 1) rotate(0deg); }
         }
 </style>
 </head>
