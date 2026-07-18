@@ -1097,17 +1097,20 @@
         currentLang = currentLang === 'en' ? 'zh' : 'en';
         const scrollY = window.scrollY;
         const wrapper = document.getElementById('page-content');
+        const html = document.documentElement;
         wrapper.classList.remove('lang-fade-in');
         wrapper.classList.add('lang-fading');
-        setTimeout(() => {
-            applyLang(currentLang);
-            document.getElementById('langToggle').textContent = currentLang === 'en' ? '中文' : 'English';
-            document.documentElement.lang = currentLang;
-            updateSchoolLinkText(currentLang);
+        html.style.scrollBehavior = 'auto';
+        applyLang(currentLang);
+        document.getElementById('langToggle').textContent = currentLang === 'en' ? '中文' : 'English';
+        document.documentElement.lang = currentLang;
+        updateSchoolLinkText(currentLang);
+        window.scrollTo(0, scrollY);
+        requestAnimationFrame(() => {
             wrapper.classList.remove('lang-fading');
             wrapper.classList.add('lang-fade-in');
-            window.scrollTo(0, scrollY);
-        }, 200);
+            html.style.scrollBehavior = '';
+        });
     }
 
     function updateSchoolLinkText() {
