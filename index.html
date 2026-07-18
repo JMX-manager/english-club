@@ -1472,37 +1472,6 @@
     })();
 
 
-    // ---- Fling-to-top: reset fade-in with blur ----
-    (function() {
-        var lastY = 0, scrollTimer = null;
-        window.addEventListener('scroll', function() {
-            var vy = lastY - window.scrollY;
-            lastY = window.scrollY;
-            if (scrollTimer) clearTimeout(scrollTimer);
-            scrollTimer = setTimeout(function() { vy = 0; }, 100);
-            if (window.scrollY <= 5 && vy > 25) {
-                var content = document.getElementById('page-content');
-                if (!content) return;
-                content.style.transition = 'filter 0.35s ease, -webkit-filter 0.35s ease';
-                content.style.filter = 'blur(5px)';
-                content.style.webkitFilter = 'blur(5px)';
-                setTimeout(function() {
-                    document.querySelectorAll('.fade-in.visible').forEach(function(el) {
-                        el.classList.remove('visible');
-                    });
-                    void content.offsetHeight;
-                    document.querySelectorAll('.fade-in').forEach(function(el) {
-                        el.classList.add('visible');
-                    });
-                }, 200);
-                setTimeout(function() {
-                    content.style.filter = '';
-                    content.style.webkitFilter = '';
-                }, 550);
-            }
-        }, { passive: true });
-    })();
-
 // ---- Fade-in on scroll ----
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
