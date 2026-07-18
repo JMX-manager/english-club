@@ -1095,22 +1095,20 @@
 
     function toggleLang() {
         currentLang = currentLang === 'en' ? 'zh' : 'en';
-        const scrollY = window.scrollY;
         const wrapper = document.getElementById('page-content');
-        const html = document.documentElement;
         wrapper.classList.remove('lang-fade-in');
         wrapper.classList.add('lang-fading');
-        html.style.scrollBehavior = 'auto';
-        applyLang(currentLang);
-        document.getElementById('langToggle').textContent = currentLang === 'en' ? '中文' : 'English';
-        document.documentElement.lang = currentLang;
-        updateSchoolLinkText(currentLang);
-        window.scrollTo(0, scrollY);
-        requestAnimationFrame(() => {
+        setTimeout(() => {
+            const scrollY = window.scrollY;
+            applyLang(currentLang);
+            document.getElementById('langToggle').textContent = currentLang === 'en' ? '中文' : 'English';
+            document.documentElement.lang = currentLang;
+            updateSchoolLinkText(currentLang);
+            void wrapper.offsetHeight;
+            window.scrollTo(0, scrollY);
             wrapper.classList.remove('lang-fading');
             wrapper.classList.add('lang-fade-in');
-            html.style.scrollBehavior = '';
-        });
+        }, 200);
     }
 
     function updateSchoolLinkText() {
