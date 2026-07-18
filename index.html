@@ -27,7 +27,6 @@
             --text: #e8ecf4;
             --text-muted: #8892b0;
             --nav-bg: rgba(11, 13, 23, 0.12);
-            --nav-bg-scroll: rgba(11, 13, 23, 0.55);
             --nav-border: rgba(255,255,255,0.06);
             --card-border: rgba(255,255,255,0.04);
             --card-glass-edge: rgba(255,255,255,0.06);
@@ -59,7 +58,6 @@
             --text: #1a1d2e;
             --text-muted: #6b7280;
             --nav-bg: rgba(255, 255, 255, 0.15);
-            --nav-bg-scroll: rgba(240, 242, 248, 0.72);
             --nav-border: rgba(0,0,0,0.06);
             --card-border: rgba(0,0,0,0.04);
             --card-glass-edge: rgba(255,255,255,0.8);
@@ -104,14 +102,11 @@
             background: var(--nav-bg);
             backdrop-filter: saturate(180%) blur(20px);
             -webkit-backdrop-filter: saturate(180%) blur(20px);
-            transition: background 0.3s ease;
+            transition: background var(--transition);
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
             user-select: none;
             -webkit-user-select: none;
-        }
-        nav.nav-scrolling {
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-            background: var(--nav-bg-scroll);
         }
         nav::after {
             content: '';
@@ -1422,16 +1417,12 @@
 
     // ---- Nav background on scroll ----
     const navEl = document.querySelector('nav');
-    let scrollTimer = null;
     window.addEventListener('scroll', () => {
         const isScrolled = window.scrollY > 60;
         navEl.style.borderBottomColor = isScrolled
             ? 'var(--nav-border)'
             : 'transparent';
-        navEl.classList.add('nav-scrolling');
-        if (scrollTimer) clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(() => navEl.classList.remove('nav-scrolling'), 200);
-    }, { passive: true });
+    });
 
 </script>
 
