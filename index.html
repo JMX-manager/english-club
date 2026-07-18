@@ -741,8 +741,10 @@
             justify-content: center;
             animation: fadeIn 0.3s ease;
         }
+        [data-theme="light"] .verify-overlay {
+            background: rgba(0,0,0,0.25);
+        }
         .verify-box {
-            background: #fff;
             border-radius: 20px;
             padding: 2.5rem 2rem;
             max-width: 380px;
@@ -754,6 +756,12 @@
                         0 0 80px rgba(79,124,255,0.08), inset 0 1px 0 rgba(255,255,255,0.8);
             border: 1px solid var(--card-border);
         }
+        [data-theme="dark"] .verify-box {
+            background: var(--surface);
+        }
+        [data-theme="light"] .verify-box {
+            background: #fff;
+        }
         .verify-box::after {
             content: '';
             position: absolute;
@@ -763,6 +771,9 @@
             height: 200%;
             background: radial-gradient(circle at 30% 20%, rgba(79,124,255,0.06), transparent 60%);
             pointer-events: none;
+        }
+        [data-theme="dark"] .verify-box::after {
+            background: radial-gradient(circle at 30% 20%, rgba(79,124,255,0.1), transparent 60%);
         }
         [data-theme="light"] .verify-box {
             background: #fff;
@@ -797,6 +808,10 @@
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
             outline: none;
+        }
+        [data-theme="dark"] .verify-confirm {
+            background: var(--accent);
+            color: #fff;
         }
         .verify-confirm:active {
             animation: liquidPress 0.5s ease-out;
