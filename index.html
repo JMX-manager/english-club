@@ -935,24 +935,7 @@
             opacity: 1;
             transition: filter 0.3s ease, opacity 0.3s ease;
         }
-            .card-press {
-            animation: cardPress 0.25s ease;
-        }
-        .card-press .icon {
-            animation: iconPress 0.3s ease;
-        }
-        @keyframes cardPress {
-            0%   { transform: scale3d(1, 1, 1); }
-            40%  { transform: scale3d(0.97, 0.97, 1); }
-            70%  { transform: scale3d(1.01, 1.01, 1); }
-            100% { transform: scale3d(1, 1, 1); }
-        }
-        @keyframes iconPress {
-            0%   { transform: scale3d(1, 1, 1) rotate(0deg); }
-            40%  { transform: scale3d(0.92, 0.92, 1) rotate(-2deg); }
-            70%  { transform: scale3d(1.06, 1.06, 1) rotate(2deg); }
-            100% { transform: scale3d(1, 1, 1) rotate(0deg); }
-        }
+    
 </style>
 </head>
 <body>
@@ -1445,14 +1428,19 @@
     // ---- Activity card click press ----
     document.querySelectorAll('.activity-card').forEach(card => {
         card.addEventListener('click', function() {
-            this.classList.remove('card-press');
-            void this.offsetWidth;
-            this.classList.add('card-press');
-        });
-    });
-    document.querySelectorAll('.activity-card').forEach(card => {
-        card.addEventListener('animationend', function() {
-            this.classList.remove('card-press');
+            const icon = this.querySelector('.icon');
+            this.animate([
+                { transform: 'scale3d(1,1,1)' },
+                { transform: 'scale3d(0.97,0.97,1)' },
+                { transform: 'scale3d(1,1,1)' }
+            ], { duration: 250, easing: 'ease' });
+            if (icon) {
+                icon.animate([
+                    { transform: 'scale3d(1,1,1) rotate(0deg)' },
+                    { transform: 'scale3d(0.92,0.92,1) rotate(-2deg)' },
+                    { transform: 'scale3d(1,1,1) rotate(0deg)' }
+                ], { duration: 300, easing: 'ease' });
+            }
         });
     });
 </script>
