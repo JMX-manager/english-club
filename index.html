@@ -714,46 +714,10 @@
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
         }
-        [data-theme="dark"] .qr-overlay::before {
-            content: '';
-            position: fixed;
-            top: -20%; left: -10%; right: -10%;
-            height: 50%;
-            background: radial-gradient(ellipse at center, rgba(79,124,255,0.08) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: -1;
-        }
-        [data-theme="dark"] .qr-overlay::after {
-            content: '';
-            position: fixed;
-            bottom: -20%; left: -10%; right: -10%;
-            height: 50%;
-            background: radial-gradient(ellipse at center, rgba(79,124,255,0.05) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: -1;
-        }
         [data-theme="light"] .qr-overlay {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-        }
-        [data-theme="light"] .qr-overlay::before {
-            content: '';
-            position: fixed;
-            top: -20%; left: -10%; right: -10%;
-            height: 50%;
-            background: radial-gradient(ellipse at center, rgba(79,124,255,0.06) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: -1;
-        }
-        [data-theme="light"] .qr-overlay::after {
-            content: '';
-            position: fixed;
-            bottom: -20%; left: -10%; right: -10%;
-            height: 50%;
-            background: radial-gradient(ellipse at center, rgba(79,124,255,0.04) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: -1;
         }
         .qr-modal-img {
             display: block;
@@ -798,56 +762,16 @@
             position: fixed;
             inset: 0;
             z-index: 999;
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             display: flex;
             align-items: center;
             justify-content: center;
             animation: fadeIn 0.3s ease;
         }
-        [data-theme="dark"] .verify-overlay {
-            background: rgba(11, 13, 23, 0.85);
-            backdrop-filter: blur(8px) saturate(180%);
-            -webkit-backdrop-filter: blur(8px) saturate(180%);
-        }
-        [data-theme="dark"] .verify-overlay::before {
-            content: '';
-            position: fixed;
-            top: -20%; left: -10%; right: -10%;
-            height: 50%;
-            background: radial-gradient(ellipse at center, rgba(79,124,255,0.08) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: -1;
-        }
-        [data-theme="dark"] .verify-overlay::after {
-            content: '';
-            position: fixed;
-            bottom: -20%; left: -10%; right: -10%;
-            height: 50%;
-            background: radial-gradient(ellipse at center, rgba(79,124,255,0.05) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: -1;
-        }
         [data-theme="light"] .verify-overlay {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(8px) saturate(180%);
-            -webkit-backdrop-filter: blur(8px) saturate(180%);
-        }
-        [data-theme="light"] .verify-overlay::before {
-            content: '';
-            position: fixed;
-            top: -20%; left: -10%; right: -10%;
-            height: 50%;
-            background: radial-gradient(ellipse at center, rgba(79,124,255,0.06) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: -1;
-        }
-        [data-theme="light"] .verify-overlay::after {
-            content: '';
-            position: fixed;
-            bottom: -20%; left: -10%; right: -10%;
-            height: 50%;
-            background: radial-gradient(ellipse at center, rgba(79,124,255,0.04) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: -1;
+            background: rgba(0,0,0,0.25);
         }
         .verify-box {
             border-radius: 20px;
@@ -970,9 +894,6 @@
             100% { opacity: 0; transform: scale(0.6); filter: blur(4px); }
         }
         .qr-overlay.qr-closing .qr-modal-img {
-            animation: qrShrink 0.25s ease-in forwards;
-        }
-        .verify-overlay.verify-closing .verify-box {
             animation: qrShrink 0.25s ease-in forwards;
         }
         .contact-item {
@@ -1498,21 +1419,12 @@
         closeBtn.style.marginTop = '1rem';
         closeBtn.style.width = '100%';
         closeBtn.textContent = currentLang === 'en' ? 'I Understand' : '我知道了';
-        closeBtn.onclick = function(e) {
-            e.stopPropagation();
-            overlay.classList.add('verify-closing');
-            setTimeout(() => overlay.remove(), 300);
-        };
+        closeBtn.onclick = function(e) { e.stopPropagation(); overlay.remove(); };
         box.appendChild(title);
         box.appendChild(desc);
         box.appendChild(closeBtn);
         overlay.appendChild(box);
-        overlay.onclick = (e) => {
-            if (e.target === overlay) {
-                overlay.classList.add('verify-closing');
-                setTimeout(() => overlay.remove(), 300);
-            }
-        };
+        overlay.onclick = () => overlay.remove();
         document.body.appendChild(overlay);
     }
 
