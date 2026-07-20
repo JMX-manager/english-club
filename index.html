@@ -1634,14 +1634,8 @@
                 doRestore();
             }, waitMs);
         };
-        var closeBtn = document.createElement('button');
-        closeBtn.className = 'verify-confirm';
-        closeBtn.style.marginTop = '1.2rem';
-        closeBtn.textContent = t('join.got_it');
-        closeBtn.onclick = function(e) { e.stopPropagation(); closeOverlay(overlay); };
         box.appendChild(msg);
         box.appendChild(restoreLink);
-        box.appendChild(closeBtn);
         overlay.appendChild(box);
         overlay.onclick = function(e) { if (e.target === overlay) closeOverlay(overlay); };
         document.body.appendChild(overlay);
