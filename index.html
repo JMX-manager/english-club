@@ -936,17 +936,22 @@
             font-size: 0.72rem;
             color: var(--accent);
             cursor: pointer;
-            margin-top: 0.6rem;
-            display: inline-block;
-            transition: opacity 0.25s ease;
+            display: block;
+            text-align: center;
+            margin: 0.6rem auto 0;
+            padding: 0.3rem 0.5rem;
+            border-radius: 100px;
+            width: fit-content;
+            transition: background 0.2s, color 0.2s;
             user-select: none;
-            line-height: 1;
+            text-decoration: none;
         }
         .restore-link:hover {
-            opacity: 0.7;
+            background: rgba(79,124,255,0.06);
         }
         .restore-link:active {
             animation: liquidPress 0.4s ease-out;
+            background: rgba(79,124,255,0.1);
         }
         @keyframes rejectIn {
             0% { opacity: 0; transform: scale(0.9) translateY(8px); }
