@@ -933,24 +933,17 @@
             margin: 0 auto;
         }
         .restore-link {
-            font-size: 0.78rem;
+            font-size: 0.72rem;
             color: var(--accent);
             cursor: pointer;
-            margin-top: 1rem;
-            margin-bottom: -0.5rem;
-            padding: 0.5rem 1rem;
+            margin-top: 0.6rem;
             display: inline-block;
-            border-radius: 100px;
-            transition: all 0.25s ease;
+            transition: opacity 0.25s ease;
             user-select: none;
-            font-weight: 500;
-            position: relative;
-            box-shadow: 0 0 0 1px rgba(79,124,255,0.15);
+            line-height: 1;
         }
         .restore-link:hover {
-            color: var(--text);
-            background: rgba(79,124,255,0.06);
-            box-shadow: 0 0 0 1.5px var(--accent), 0 0 20px rgba(79,124,255,0.12);
+            opacity: 0.7;
         }
         .restore-link:active {
             animation: liquidPress 0.4s ease-out;
@@ -1589,11 +1582,24 @@
         closeBtn.className = 'verify-confirm';
         closeBtn.style.marginTop = '1.2rem';
         closeBtn.textContent = t('join.got_it');
-        closeBtn.onclick = function(e) { e.stopPropagation(); closeOverlay(overlay); };
+        closeBtn.onclick = function(e) {
+            e.stopPropagation();
+            var b = overlay.querySelector('.verify-box');
+            if (b) b.classList.add('closing');
+            overlay.classList.add('closing');
+            setTimeout(function() { if (overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 250);
+        };
         box.appendChild(msg);
         box.appendChild(closeBtn);
         overlay.appendChild(box);
-        overlay.onclick = function(e) { if (e.target === overlay) closeOverlay(overlay); };
+        overlay.onclick = function(e) {
+            if (e.target === overlay) {
+                var b = overlay.querySelector('.verify-box');
+                if (b) b.classList.add('closing');
+                overlay.classList.add('closing');
+                setTimeout(function() { if (overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 250);
+            }
+        };
         document.body.appendChild(overlay);
     }
 
@@ -1675,7 +1681,11 @@
     // On page load
     (function() {
         checkPendingRestore();
-        if (studentRefused && !restoreStart) {
+        if (studentRefused && restoreStart) {
+            // Restore timer is running — show nav pending
+            showNavPending();
+        }
+        if (studentRefused) {
             var btn = document.getElementById('verifyBtn');
             if (btn) {
                 btn.classList.add('verify-disabled');
@@ -1725,7 +1735,7 @@
             var btn = document.getElementById('verifyBtn');
             if (btn) {
                 btn.classList.add('verify-disabled');
-                btn.onclick = function(ev) { ev.preventDefault(); showRejectionModal(); };
+                btn.onclick = function(ev) { ev.preventDefault(); handleVerifyClick(); };
             }
         };
 
