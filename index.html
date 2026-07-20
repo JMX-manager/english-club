@@ -891,6 +891,11 @@
             pointer-events: auto !important;
             cursor: pointer !important;
             filter: grayscale(1);
+            transition: opacity 0.3s, filter 0.3s;
+        }
+        .verify-disabled.restoring {
+            opacity: 0.3 !important;
+            filter: grayscale(1) brightness(0.7);
         }
         [data-theme="dark"] .verify-disabled {
             background: rgba(255,255,255,0.06) !important;
@@ -920,15 +925,57 @@
             cursor: pointer;
             margin-top: 1rem;
             margin-bottom: -0.5rem;
-            transition: opacity 0.2s;
+            padding: 0.5rem 1rem;
+            display: inline-block;
+            border-radius: 100px;
+            transition: all 0.25s ease;
             user-select: none;
+            font-weight: 500;
+            position: relative;
+            box-shadow: 0 0 0 1px rgba(79,124,255,0.15);
         }
         .restore-link:hover {
-            opacity: 0.7;
+            color: var(--text);
+            background: rgba(79,124,255,0.06);
+            box-shadow: 0 0 0 1.5px var(--accent), 0 0 20px rgba(79,124,255,0.12);
+        }
+        .restore-link:active {
+            animation: liquidPress 0.4s ease-out;
         }
         @keyframes rejectIn {
             0% { opacity: 0; transform: scale(0.9) translateY(8px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        /* Nav pending status bar */
+        .nav-status {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0.85rem 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.02em;
+            transition: opacity var(--transition), transform var(--transition);
+            opacity: 0;
+            transform: translateY(-4px);
+        }
+        .nav-status.visible {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .nav-inner {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .nav-inner.fade-out {
+            opacity: 0;
+            transform: translateY(-6px);
+            pointer-events: none;
+        }
+        .nav-inner.fade-in {
+            opacity: 1;
+            transform: translateY(0);
         }
         /* Restore popup — top banner */
         .restore-popup {
@@ -1111,7 +1158,7 @@
 <body>
 
 <nav>
-    <div class="nav-inner">
+    <div class="nav-inner" id="navContent">
         <div class="logo" data-i18n="nav.logo">ENGLISH <span>·</span> CLUB</div>
         <div class="nav-right">
             <button class="lang-toggle" id="langToggle" onclick="toggleLang()">中文</button>
@@ -1122,6 +1169,7 @@
             </div>
         </div>
     </div>
+    <div class="nav-status" id="navStatus"></div>
 </nav>
 
 <div id="page-content">
@@ -1304,6 +1352,8 @@
             'join.restore_link': 'Request Verification Reset',
             'join.restore_accepted': 'Your request has been accepted. You may now verify your identity.',
             'join.restore_pending': 'We are reviewing your information. Please wait patiently.',
+            'join.got_it': 'Got it',
+            'join.nav_pending': 'Processing...',
             'nav.logo': 'ENGLISH <span>\u00b7</span> CLUB',
             'footer.site': 'School Site →',
             'footer.title': 'Fushun No.1 High School English Club',
@@ -1358,6 +1408,8 @@
             'join.restore_link': '申请恢复验证',
             'join.restore_accepted': '您的申请已被受理，您可以重新验证身份。',
             'join.restore_pending': '我们正在核查信息，请耐心等待。',
+            'join.got_it': '知道了',
+            'join.nav_pending': '我们正在处理您的申请...',
             'nav.logo': '英语 <span>\u00b7</span> 社团',
             'footer.site': '学校官网 \u2192',
             'footer.title': '抚顺市第一中学英语社团',
@@ -1477,13 +1529,40 @@
         var closeBtn = document.createElement('button');
         closeBtn.className = 'verify-confirm';
         closeBtn.style.marginTop = '1.2rem';
-        closeBtn.textContent = t('join.got_it') || (currentLang === 'en' ? 'Got it' : '知道了');
+        closeBtn.textContent = t('join.got_it');
         closeBtn.onclick = function(e) { e.stopPropagation(); overlay.remove(); };
         box.appendChild(msg);
         box.appendChild(closeBtn);
         overlay.appendChild(box);
         overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
         document.body.appendChild(overlay);
+    }
+
+    function showNavPending() {
+        var navContent = document.getElementById('navContent');
+        var navStatus = document.getElementById('navStatus');
+        if (navContent) navContent.className = 'nav-inner fade-out';
+        if (navStatus) {
+            navStatus.textContent = t('join.nav_pending');
+            navStatus.className = 'nav-status visible';
+        }
+        var btn = document.getElementById('verifyBtn');
+        if (btn) btn.classList.add('restoring');
+    }
+
+    function hideNavPending() {
+        var navContent = document.getElementById('navContent');
+        var navStatus = document.getElementById('navStatus');
+        if (navStatus) {
+            navStatus.className = 'nav-status';
+            setTimeout(function() { navStatus.style.display = 'none'; }, 500);
+        }
+        if (navContent) {
+            navContent.className = 'nav-inner fade-in';
+            setTimeout(function() { navContent.className = 'nav-inner'; }, 500);
+        }
+        var btn = document.getElementById('verifyBtn');
+        if (btn) btn.classList.remove('restoring');
     }
 
     function doRestore() {
@@ -1493,9 +1572,11 @@
         localStorage.removeItem('restorePending');
         localStorage.removeItem('restoreStart');
         localStorage.removeItem('restoreDuration');
+        hideNavPending();
         var btn = document.getElementById('verifyBtn');
         if (btn) {
             btn.classList.remove('verify-disabled');
+            btn.classList.remove('restoring');
             btn.onclick = function(ev) { ev.preventDefault(); handleVerifyClick(); };
         }
         // Acceptance popup
@@ -1532,6 +1613,8 @@
         restoreLink.onclick = function(e) {
             e.stopPropagation();
             overlay.remove();
+            // Show pending in nav bar
+            showNavPending();
             // Mark as pending — button will show waiting msg on next click
             restorePending = true;
             localStorage.setItem('restorePending', 'true');
@@ -1547,7 +1630,7 @@
         var closeBtn = document.createElement('button');
         closeBtn.className = 'verify-confirm';
         closeBtn.style.marginTop = '1.2rem';
-        closeBtn.textContent = currentLang === 'en' ? 'Got it' : '知道了';
+        closeBtn.textContent = t('join.got_it');
         closeBtn.onclick = function(e) { e.stopPropagation(); overlay.remove(); };
         box.appendChild(msg);
         box.appendChild(restoreLink);
