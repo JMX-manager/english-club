@@ -1590,12 +1590,12 @@
         var closeBtn = document.createElement('button');
         closeBtn.className = 'verify-confirm';
         closeBtn.style.marginTop = '1.2rem';
-        closeBtn.textContent = currentLang === 'en' ? 'Got it' : '知道了';
-        closeBtn.onclick = function(e) { e.stopPropagation(); overlay.remove(); };
+        closeBtn.textContent = t('join.got_it');
+        closeBtn.onclick = function(e) { e.stopPropagation(); closeOverlay(overlay); };
         box.appendChild(msg);
         box.appendChild(closeBtn);
         overlay.appendChild(box);
-        overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+        overlay.onclick = function(e) { if (e.target === overlay) closeOverlay(overlay); };
         document.body.appendChild(overlay);
     }
 
@@ -1659,10 +1659,16 @@
     function handleVerifyClick() {
         if (studentRefused) {
             if (restorePending) {
-                showWaitingModal();
-            } else {
-                showRejectionModal();
+                // Already processing — nav banner shows status, just play animation
+                var btn = document.getElementById('verifyBtn');
+                if (btn) {
+                    btn.classList.remove('restoring');
+                    void btn.offsetHeight;
+                    btn.classList.add('restoring');
+                }
+                return;
             }
+            showRejectionModal();
         } else {
             showVerifyModal();
         }
