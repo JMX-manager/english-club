@@ -885,6 +885,52 @@
         .verify-cancel:active {
             animation: liquidPress 0.5s ease-out;
         }
+        /* Disabled verify button */
+        .verify-disabled {
+            opacity: 0.4 !important;
+            pointer-events: auto !important;
+            cursor: pointer !important;
+            filter: grayscale(1);
+        }
+        [data-theme="dark"] .verify-disabled {
+            background: rgba(255,255,255,0.06) !important;
+            color: rgba(255,255,255,0.3) !important;
+            border-color: transparent;
+        }
+        [data-theme="light"] .verify-disabled {
+            background: #e5e7eb !important;
+            color: #9ca3af !important;
+            border-color: transparent;
+        }
+        /* Rejection modal */
+        .rejection-box {
+            text-align: center;
+            animation: rejectIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        [data-theme="dark"] .rejection-box {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        [data-theme="light"] .rejection-box {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            background: rgba(255,255,255,0.85);
+        }
+        .rejection-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .rejection-msg {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+        @keyframes rejectIn {
+            0% { opacity: 0; transform: scale(0.85) translateY(10px); filter: blur(3px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.96); }
             to { opacity: 1; transform: scale(1); }
@@ -1143,7 +1189,7 @@
         </div>
         <div class="qr-section">
             <p class="qr-intro" data-i18n="join.qrintro">We have built an online community for daily communication. The community is exclusively for current Fushun No.1 students. Verify your identity to access the group QR code.</p>
-            <a href="#" class="btn btn-verify" onclick="event.preventDefault(); showVerifyModal()" data-i18n="join.qrbtn">Verify & View QR →</a>
+            <a href="#" class="btn btn-verify" id="verifyBtn" onclick="event.preventDefault(); handleVerifyClick()" data-i18n="join.qrbtn">Verify & View QR →</a>
         </div>
     </div>
 </section>
@@ -1352,6 +1398,47 @@
         }, 180000);
     }
 
+    var studentRefused = false;
+
+    function showRejectionModal() {
+        var overlay = document.createElement('div');
+        overlay.className = 'verify-overlay';
+
+        var box = document.createElement('div');
+        box.className = 'verify-box rejection-box';
+
+        var icon = document.createElement('div');
+        icon.className = 'rejection-icon';
+        icon.textContent = '😔';
+
+        var msg = document.createElement('p');
+        msg.className = 'rejection-msg';
+        msg.textContent = currentLang === 'en'
+            ? 'Sorry, we are unable to serve you. If you have any questions, please contact us.'
+            : '对不起，我们无法为您提供服务。如有疑问，请联系我们。';
+
+        var closeBtn = document.createElement('button');
+        closeBtn.className = 'verify-confirm';
+        closeBtn.style.marginTop = '1.2rem';
+        closeBtn.textContent = currentLang === 'en' ? 'Got it' : '知道了';
+        closeBtn.onclick = function(e) { e.stopPropagation(); overlay.remove(); };
+
+        box.appendChild(icon);
+        box.appendChild(msg);
+        box.appendChild(closeBtn);
+        overlay.appendChild(box);
+        overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+        document.body.appendChild(overlay);
+    }
+
+    function handleVerifyClick() {
+        if (studentRefused) {
+            showRejectionModal();
+        } else {
+            showVerifyModal();
+        }
+    }
+
     function showVerifyModal() {
         const overlay = document.createElement('div');
         overlay.className = 'verify-overlay';
@@ -1387,6 +1474,12 @@
         cancelBtn.onclick = function(e) {
             e.stopPropagation();
             overlay.remove();
+            studentRefused = true;
+            var btn = document.getElementById('verifyBtn');
+            if (btn) {
+                btn.classList.add('verify-disabled');
+                btn.onclick = function(ev) { ev.preventDefault(); showRejectionModal(); };
+            }
         };
 
         btnRow.appendChild(confirmBtn);
