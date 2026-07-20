@@ -1303,6 +1303,7 @@
             'join.rejection_msg': 'Sorry, your identity verification has failed. We are unable to serve you.',
             'join.restore_link': 'Request Verification Reset',
             'join.restore_accepted': 'Your request has been accepted. You may now verify your identity.',
+            'join.restore_pending': 'We are reviewing your information. Please wait patiently.',
             'nav.logo': 'ENGLISH <span>\u00b7</span> CLUB',
             'footer.site': 'School Site →',
             'footer.title': 'Fushun No.1 High School English Club',
@@ -1356,6 +1357,7 @@
             'join.rejection_msg': '对不起，您的身份验证未通过，我们无法为您提供服务。',
             'join.restore_link': '申请恢复验证',
             'join.restore_accepted': '您的申请已被受理，您可以重新验证身份。',
+            'join.restore_pending': '我们正在核查信息，请耐心等待。',
             'nav.logo': '英语 <span>\u00b7</span> 社团',
             'footer.site': '学校官网 \u2192',
             'footer.title': '抚顺市第一中学英语社团',
@@ -1454,6 +1456,7 @@
     }
 
     var studentRefused = localStorage.getItem('studentRefused') === 'true';
+    var restorePending = localStorage.getItem('restorePending') === 'true';
     var restoreStart = parseInt(localStorage.getItem('restoreStart') || '0', 10);
     var restoreDuration = parseInt(localStorage.getItem('restoreDuration') || '0', 10);
     var restoreTimer = null;
@@ -1463,9 +1466,31 @@
         return dict && dict[key] ? dict[key] : (i18n['zh'][key] || key);
     }
 
+    function showWaitingModal() {
+        var overlay = document.createElement('div');
+        overlay.className = 'verify-overlay';
+        var box = document.createElement('div');
+        box.className = 'verify-box rejection-box';
+        var msg = document.createElement('p');
+        msg.className = 'rejection-msg';
+        msg.textContent = t('join.restore_pending');
+        var closeBtn = document.createElement('button');
+        closeBtn.className = 'verify-confirm';
+        closeBtn.style.marginTop = '1.2rem';
+        closeBtn.textContent = t('join.got_it') || (currentLang === 'en' ? 'Got it' : '知道了');
+        closeBtn.onclick = function(e) { e.stopPropagation(); overlay.remove(); };
+        box.appendChild(msg);
+        box.appendChild(closeBtn);
+        overlay.appendChild(box);
+        overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+        document.body.appendChild(overlay);
+    }
+
     function doRestore() {
         studentRefused = false;
+        restorePending = false;
         localStorage.removeItem('studentRefused');
+        localStorage.removeItem('restorePending');
         localStorage.removeItem('restoreStart');
         localStorage.removeItem('restoreDuration');
         var btn = document.getElementById('verifyBtn');
@@ -1507,6 +1532,9 @@
         restoreLink.onclick = function(e) {
             e.stopPropagation();
             overlay.remove();
+            // Mark as pending — button will show waiting msg on next click
+            restorePending = true;
+            localStorage.setItem('restorePending', 'true');
             // Random wait: 20-40 seconds
             var waitMs = Math.floor(Math.random() * 20000) + 20000;
             var startTime = Date.now();
@@ -1547,7 +1575,11 @@
 
     function handleVerifyClick() {
         if (studentRefused) {
-            showRejectionModal();
+            if (restorePending) {
+                showWaitingModal();
+            } else {
+                showRejectionModal();
+            }
         } else {
             showVerifyModal();
         }
@@ -1560,7 +1592,7 @@
             var btn = document.getElementById('verifyBtn');
             if (btn) {
                 btn.classList.add('verify-disabled');
-                btn.onclick = function(ev) { ev.preventDefault(); showRejectionModal(); };
+                btn.onclick = function(ev) { ev.preventDefault(); handleVerifyClick(); };
             }
         }
     })();
