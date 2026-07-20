@@ -1398,7 +1398,7 @@
         }, 180000);
     }
 
-    var studentRefused = false;
+    var studentRefused = localStorage.getItem('studentRefused') === 'true';
 
     function showRejectionModal() {
         var overlay = document.createElement('div');
@@ -1439,6 +1439,17 @@
         }
     }
 
+    // On page load, gray out button if previously refused
+    (function() {
+        if (studentRefused) {
+            var btn = document.getElementById('verifyBtn');
+            if (btn) {
+                btn.classList.add('verify-disabled');
+                btn.onclick = function(ev) { ev.preventDefault(); showRejectionModal(); };
+            }
+        }
+    })();
+
     function showVerifyModal() {
         const overlay = document.createElement('div');
         overlay.className = 'verify-overlay';
@@ -1475,6 +1486,7 @@
             e.stopPropagation();
             overlay.remove();
             studentRefused = true;
+            localStorage.setItem('studentRefused', 'true');
             var btn = document.getElementById('verifyBtn');
             if (btn) {
                 btn.classList.add('verify-disabled');
