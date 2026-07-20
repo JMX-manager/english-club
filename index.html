@@ -1029,6 +1029,17 @@
             0% { opacity: 0; transform: translateY(-100%) translateZ(0); }
             100% { opacity: 1; transform: translateY(0) translateZ(0); }
         }
+        @keyframes modalShrink {
+            0% { opacity: 1; transform: scale(1); }
+            60% { opacity: 0.4; transform: scale(0.85); filter: blur(1px); }
+            100% { opacity: 0; transform: scale(0.6); filter: blur(3px); }
+        }
+        .verify-box.closing {
+            animation: modalShrink 0.2s ease-in forwards;
+        }
+        .verify-overlay.closing {
+            animation: modalShrink 0.2s ease-in forwards;
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.96); }
             to { opacity: 1; transform: scale(1); }
@@ -1522,24 +1533,13 @@
         return dict && dict[key] ? dict[key] : (i18n['zh'][key] || key);
     }
 
-    function showWaitingModal() {
-        var overlay = document.createElement('div');
-        overlay.className = 'verify-overlay';
-        var box = document.createElement('div');
-        box.className = 'verify-box rejection-box';
-        var msg = document.createElement('p');
-        msg.className = 'rejection-msg';
-        msg.textContent = t('join.restore_pending');
-        var closeBtn = document.createElement('button');
-        closeBtn.className = 'verify-confirm';
-        closeBtn.style.marginTop = '1.2rem';
-        closeBtn.textContent = t('join.got_it');
-        closeBtn.onclick = function(e) { e.stopPropagation(); overlay.remove(); };
-        box.appendChild(msg);
-        box.appendChild(closeBtn);
-        overlay.appendChild(box);
-        overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
-        document.body.appendChild(overlay);
+    function closeOverlay(overlay) {
+        var box = overlay.querySelector('.verify-box');
+        if (box) box.classList.add('closing');
+        overlay.classList.add('closing');
+        setTimeout(function() {
+            if (overlay && overlay.parentNode) overlay.remove();
+        }, 250);
     }
 
     function showNavPending() {
@@ -1610,7 +1610,7 @@
         restoreLink.textContent = t('join.restore_link');
         restoreLink.onclick = function(e) {
             e.stopPropagation();
-            overlay.remove();
+            closeOverlay(overlay);
             // Show pending in nav bar
             showNavPending();
             // Mark as pending — button will show waiting msg on next click
@@ -1629,12 +1629,12 @@
         closeBtn.className = 'verify-confirm';
         closeBtn.style.marginTop = '1.2rem';
         closeBtn.textContent = t('join.got_it');
-        closeBtn.onclick = function(e) { e.stopPropagation(); overlay.remove(); };
+        closeBtn.onclick = function(e) { e.stopPropagation(); closeOverlay(overlay); };
         box.appendChild(msg);
         box.appendChild(restoreLink);
         box.appendChild(closeBtn);
         overlay.appendChild(box);
-        overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+        overlay.onclick = function(e) { if (e.target === overlay) closeOverlay(overlay); };
         document.body.appendChild(overlay);
     }
 
@@ -1709,7 +1709,7 @@
         confirmBtn.textContent = currentLang === 'en' ? 'I\'m a No.1 student, show QR' : '我是一中学生，查看二维码';
         confirmBtn.onclick = function(e) {
             e.stopPropagation();
-            overlay.remove();
+            closeOverlay(overlay);
             showQR();
         };
 
@@ -1718,7 +1718,7 @@
         cancelBtn.textContent = currentLang === 'en' ? 'Not a No.1 student' : '我不是一中学生';
         cancelBtn.onclick = function(e) {
             e.stopPropagation();
-            overlay.remove();
+            closeOverlay(overlay);
             studentRefused = true;
             localStorage.setItem('studentRefused', 'true');
             localStorage.removeItem('restoreRequested');
@@ -1735,7 +1735,7 @@
         box.appendChild(desc);
         box.appendChild(btnRow);
         overlay.appendChild(box);
-        overlay.onclick = () => overlay.remove();
+        overlay.onclick = function(e) { if (e.target === overlay) closeOverlay(overlay); };
         document.body.appendChild(overlay);
     }
 
@@ -1761,12 +1761,12 @@
         closeBtn.style.marginTop = '1rem';
         closeBtn.style.width = '100%';
         closeBtn.textContent = currentLang === 'en' ? 'I Understand' : '我知道了';
-        closeBtn.onclick = function(e) { e.stopPropagation(); overlay.remove(); };
+        closeBtn.onclick = function(e) { e.stopPropagation(); closeOverlay(overlay); };
         box.appendChild(title);
         box.appendChild(desc);
         box.appendChild(closeBtn);
         overlay.appendChild(box);
-        overlay.onclick = () => overlay.remove();
+        overlay.onclick = function(e) { if (e.target === overlay) closeOverlay(overlay); };
         document.body.appendChild(overlay);
     }
 
