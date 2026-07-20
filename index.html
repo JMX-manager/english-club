@@ -1030,7 +1030,10 @@
             animation: modalShrink 0.2s ease-in forwards;
         }
         .verify-overlay.closing {
-            animation: modalShrink 0.2s ease-in forwards;
+            transition: opacity 0.2s ease, backdrop-filter 0.2s ease;
+            opacity: 0;
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.96); }
