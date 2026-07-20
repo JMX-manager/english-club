@@ -130,6 +130,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            min-height: 1.5rem;
+        }
+        .nav-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            transition: opacity 0.3s ease;
+        }
+        .nav-row.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
         nav .nav-right {
             display: flex;
@@ -946,36 +959,25 @@
             0% { opacity: 0; transform: scale(0.9) translateY(8px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
         }
-        /* Nav pending status bar */
+        /* Nav pending status — overlays content, same container height */
         .nav-status {
-            display: none;
+            position: absolute;
+            left: 0; right: 0; top: 0; bottom: 0;
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0.85rem 1.5rem;
+            padding: 0 2rem;
             font-size: 0.85rem;
             font-weight: 500;
             color: var(--text-muted);
             letter-spacing: 0.02em;
-            transition: opacity var(--transition), transform var(--transition);
             opacity: 0;
-            transform: translateY(-4px);
-        }
-        .nav-status.visible {
-            display: flex;
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .nav-inner {
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-        .nav-inner.fade-out {
-            opacity: 0;
-            transform: translateY(-6px);
+            transition: opacity 0.3s ease;
             pointer-events: none;
         }
-        .nav-inner.fade-in {
+        .nav-status.visible {
             opacity: 1;
-            transform: translateY(0);
+            pointer-events: auto;
         }
         /* Restore popup — top banner */
         .restore-popup {
@@ -1159,17 +1161,19 @@
 
 <nav>
     <div class="nav-inner" id="navContent">
-        <div class="logo" data-i18n="nav.logo">ENGLISH <span>·</span> CLUB</div>
-        <div class="nav-right">
-            <button class="lang-toggle" id="langToggle" onclick="toggleLang()">中文</button>
-            <div class="nav-links">
-                <a href="#about" data-i18n="nav.about">About</a>
-                <a href="#activities" data-i18n="nav.activities">Activities</a>
-                <a href="#join" data-i18n="nav.join">Join</a>
+        <div class="nav-row" id="navRow">
+            <div class="logo" data-i18n="nav.logo">ENGLISH <span>·</span> CLUB</div>
+            <div class="nav-right">
+                <button class="lang-toggle" id="langToggle" onclick="toggleLang()">中文</button>
+                <div class="nav-links">
+                    <a href="#about" data-i18n="nav.about">About</a>
+                    <a href="#activities" data-i18n="nav.activities">Activities</a>
+                    <a href="#join" data-i18n="nav.join">Join</a>
+                </div>
             </div>
         </div>
+        <div class="nav-status" id="navStatus"></div>
     </div>
-    <div class="nav-status" id="navStatus"></div>
 </nav>
 
 <div id="page-content">
@@ -1539,28 +1543,22 @@
     }
 
     function showNavPending() {
-        var navContent = document.getElementById('navContent');
+        var navRow = document.getElementById('navRow');
         var navStatus = document.getElementById('navStatus');
-        if (navContent) navContent.className = 'nav-inner fade-out';
+        if (navRow) navRow.classList.add('hidden');
         if (navStatus) {
             navStatus.textContent = t('join.nav_pending');
-            navStatus.className = 'nav-status visible';
+            navStatus.classList.add('visible');
         }
         var btn = document.getElementById('verifyBtn');
         if (btn) btn.classList.add('restoring');
     }
 
     function hideNavPending() {
-        var navContent = document.getElementById('navContent');
+        var navRow = document.getElementById('navRow');
         var navStatus = document.getElementById('navStatus');
-        if (navStatus) {
-            navStatus.className = 'nav-status';
-            setTimeout(function() { navStatus.style.display = 'none'; }, 500);
-        }
-        if (navContent) {
-            navContent.className = 'nav-inner fade-in';
-            setTimeout(function() { navContent.className = 'nav-inner'; }, 500);
-        }
+        if (navStatus) navStatus.classList.remove('visible');
+        if (navRow) navRow.classList.remove('hidden');
         var btn = document.getElementById('verifyBtn');
         if (btn) btn.classList.remove('restoring');
     }
