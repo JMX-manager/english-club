@@ -1300,6 +1300,9 @@
             'join.location': 'Rm 3, 5F North Bldg',
             'join.qrbtn': 'Verify Identity<br>& View QR →',
             'join.qrintro': 'We have built an online community for daily communication. The community is exclusively for current Fushun No.1 students. Verify your identity to access the group QR code.',
+            'join.rejection_msg': 'Sorry, your identity verification has failed. We are unable to serve you.',
+            'join.restore_link': 'Request Verification Reset',
+            'join.restore_accepted': 'Your request has been accepted. You may now verify your identity.',
             'nav.logo': 'ENGLISH <span>\u00b7</span> CLUB',
             'footer.site': 'School Site →',
             'footer.title': 'Fushun No.1 High School English Club',
@@ -1350,6 +1353,9 @@
             'join.location': '北楼五楼三号会议室',
             'join.qrbtn': '验证身份<br>并查看二维码 →',
             'join.qrintro': '我们搭建了线上社群方便日常交流，社群仅面向一中在读学生，验证身份后即可查看群二维码。',
+            'join.rejection_msg': '对不起，您的身份验证未通过，我们无法为您提供服务。',
+            'join.restore_link': '申请恢复验证',
+            'join.restore_accepted': '您的申请已被受理，您可以重新验证身份。',
             'nav.logo': '英语 <span>\u00b7</span> 社团',
             'footer.site': '学校官网 \u2192',
             'footer.title': '抚顺市第一中学英语社团',
@@ -1448,35 +1454,73 @@
     }
 
     var studentRefused = localStorage.getItem('studentRefused') === 'true';
-    var restoreRequested = localStorage.getItem('restoreRequested') === 'true';
+    var restoreStart = parseInt(localStorage.getItem('restoreStart') || '0', 10);
+    var restoreDuration = parseInt(localStorage.getItem('restoreDuration') || '0', 10);
+    var restoreTimer = null;
 
-    function showRejectionModal() {
+    function t(key) {
+        var dict = i18n[currentLang];
+        return dict && dict[key] ? dict[key] : (i18n['zh'][key] || key);
+    }
+
+    function doRestore() {
+        studentRefused = false;
+        localStorage.removeItem('studentRefused');
+        localStorage.removeItem('restoreStart');
+        localStorage.removeItem('restoreDuration');
+        var btn = document.getElementById('verifyBtn');
+        if (btn) {
+            btn.classList.remove('verify-disabled');
+            btn.onclick = function(ev) { ev.preventDefault(); handleVerifyClick(); };
+        }
+        // Acceptance popup
         var overlay = document.createElement('div');
         overlay.className = 'verify-overlay';
-
         var box = document.createElement('div');
         box.className = 'verify-box rejection-box';
-
         var msg = document.createElement('p');
         msg.className = 'rejection-msg';
-        msg.textContent = '对不起，您的身份验证未通过，我们无法为您提供服务。';
-
-        var restoreLink = document.createElement('p');
-        restoreLink.className = 'restore-link';
-        restoreLink.textContent = '申请恢复验证';
-        restoreLink.onclick = function(e) {
-            e.stopPropagation();
-            overlay.remove();
-            localStorage.setItem('restoreRequested', 'true');
-            showVerifyModal();
-        };
-
+        msg.textContent = t('join.restore_accepted');
         var closeBtn = document.createElement('button');
         closeBtn.className = 'verify-confirm';
         closeBtn.style.marginTop = '1.2rem';
         closeBtn.textContent = currentLang === 'en' ? 'Got it' : '知道了';
         closeBtn.onclick = function(e) { e.stopPropagation(); overlay.remove(); };
+        box.appendChild(msg);
+        box.appendChild(closeBtn);
+        overlay.appendChild(box);
+        overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+        document.body.appendChild(overlay);
+    }
 
+    function showRejectionModal() {
+        var overlay = document.createElement('div');
+        overlay.className = 'verify-overlay';
+        var box = document.createElement('div');
+        box.className = 'verify-box rejection-box';
+        var msg = document.createElement('p');
+        msg.className = 'rejection-msg';
+        msg.textContent = t('join.rejection_msg');
+        var restoreLink = document.createElement('p');
+        restoreLink.className = 'restore-link';
+        restoreLink.textContent = t('join.restore_link');
+        restoreLink.onclick = function(e) {
+            e.stopPropagation();
+            overlay.remove();
+            // Random wait: 20-40 seconds
+            var waitMs = Math.floor(Math.random() * 20000) + 20000;
+            var startTime = Date.now();
+            localStorage.setItem('restoreStart', String(startTime));
+            localStorage.setItem('restoreDuration', String(waitMs));
+            restoreTimer = setTimeout(function() {
+                doRestore();
+            }, waitMs);
+        };
+        var closeBtn = document.createElement('button');
+        closeBtn.className = 'verify-confirm';
+        closeBtn.style.marginTop = '1.2rem';
+        closeBtn.textContent = currentLang === 'en' ? 'Got it' : '知道了';
+        closeBtn.onclick = function(e) { e.stopPropagation(); overlay.remove(); };
         box.appendChild(msg);
         box.appendChild(restoreLink);
         box.appendChild(closeBtn);
@@ -1485,41 +1529,20 @@
         document.body.appendChild(overlay);
     }
 
-    function showRestorePopup() {
-        var popup = document.createElement('div');
-        popup.className = 'restore-popup';
-
-        var msg = document.createElement('span');
-        msg.className = 'restore-popup-msg';
-        msg.textContent = '系统同意了您的申请，请重新选择您的身份。';
-
-        var okBtn = document.createElement('button');
-        okBtn.className = 'restore-popup-btn';
-        okBtn.textContent = currentLang === 'en' ? 'Got it' : '我知道了';
-        okBtn.onclick = function() {
-            popup.remove();
-            localStorage.removeItem('studentRefused');
-            localStorage.removeItem('restoreRequested');
-            studentRefused = false;
-            restoreRequested = false;
-            var btn = document.getElementById('verifyBtn');
-            if (btn) {
-                btn.classList.remove('verify-disabled');
-                btn.onclick = function(ev) { ev.preventDefault(); handleVerifyClick(); };
+    function checkPendingRestore() {
+        if (restoreStart > 0 && restoreDuration > 0) {
+            var elapsed = Date.now() - restoreStart;
+            if (elapsed >= restoreDuration) {
+                // Timer already expired — show acceptance immediately
+                doRestore();
+            } else {
+                // Timer still running — set remaining timeout
+                var remaining = restoreDuration - elapsed;
+                restoreTimer = setTimeout(function() {
+                    doRestore();
+                }, remaining);
             }
-            // Also clear the inline handler
-            var oldBtn = document.getElementById('verifyBtn');
-            if (oldBtn) oldBtn.onclick = function(ev) { ev.preventDefault(); handleVerifyClick(); };
-        };
-
-        popup.appendChild(msg);
-        popup.appendChild(okBtn);
-        document.body.appendChild(popup);
-
-        // Auto-remove after 10s if not clicked
-        setTimeout(function() {
-            if (popup.parentNode) popup.remove();
-        }, 10000);
+        }
     }
 
     function handleVerifyClick() {
@@ -1532,15 +1555,8 @@
 
     // On page load
     (function() {
-        if (restoreRequested) {
-            // Clear flags so popup only shows once
-            localStorage.removeItem('studentRefused');
-            localStorage.removeItem('restoreRequested');
-            studentRefused = false;
-            restoreRequested = false;
-            // Show restore popup immediately
-            setTimeout(showRestorePopup, 300);
-        } else if (studentRefused) {
+        checkPendingRestore();
+        if (studentRefused && !restoreStart) {
             var btn = document.getElementById('verifyBtn');
             if (btn) {
                 btn.classList.add('verify-disabled');
