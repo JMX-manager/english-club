@@ -119,84 +119,59 @@
         }
 
 
-        /* ---- Nav: Liquid Glass (3-layer isolated) ---- */
-        /* Layer 0: nav — backdrop blur container */
+        /* ---- Nav: Liquid Glass ---- */
         nav {
             position: fixed;
             top: 0; left: 0; right: 0;
             z-index: 100;
-            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-            backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-            isolation: isolate;
             user-select: none;
             -webkit-user-select: none;
             -webkit-transform: translateZ(0);
             transform: translateZ(0);
+            isolation: isolate;
         }
-        /* Layer 1: ::before — glass gradient + SVG refraction (no edge rendering) */
+        /* Glass background: blur + refraction + highlight */
         nav::before {
             content: '';
             position: absolute;
             inset: 0;
-            z-index: -2;
-            /* Gradient creates visible texture for displacement to act on */
-            background:
-                linear-gradient(
-                    108deg,
-                    rgba(255,255,255,0.02) 0%,
-                    rgba(255,255,255,0.10) 25%,
-                    rgba(255,255,255,0.16) 50%,
-                    rgba(255,255,255,0.09) 75%,
-                    rgba(255,255,255,0.02) 100%
-                ),
-                var(--glass-bg);
+            z-index: -1;
+            background: var(--glass-bg);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+            backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
             -webkit-filter: url(#lg-filter);
             filter: url(#lg-filter);
-            /* No border/shadow here — they'd get wavy */
-            contain: layout paint;
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-        }
-        /* Layer 2: ::after — highlight (straight edges, no SVG filter) */
-        nav::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 0;
-            z-index: -1;
             border-bottom: 1px solid var(--glass-border);
             box-shadow:
                 inset 0 1px 0 var(--glass-highlight),
                 var(--glass-shadow);
-            pointer-events: none;
+            contain: layout paint;
+            overflow: hidden;
             -webkit-transform: translateZ(0);
             transform: translateZ(0);
+            will-change: transform;
         }
-        /* Non-Chromium fallback */
+        /* Non-Chromium fallback: no SVG displacement, use stronger blur */
         @supports not (filter: url(#lg-filter)) {
             nav::before {
                 -webkit-filter: none;
                 filter: none;
-            }
-            nav {
                 -webkit-backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturate));
                 backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturate));
             }
         }
-        /* Reduced motion: static glass only */
+        /* Reduced motion: static glass, no displacement */
         @media (prefers-reduced-motion: reduce) {
             nav::before {
                 -webkit-filter: none;
                 filter: none;
-            }
-            nav {
                 -webkit-backdrop-filter: blur(8px) saturate(var(--glass-saturate));
                 backdrop-filter: blur(8px) saturate(var(--glass-saturate));
             }
         }
-        /* Mobile: reduced load */
+        /* Mobile: lighter filter */
         @media (max-width: 768px) {
-            nav {
+            nav::before {
                 backdrop-filter: blur(1.5px) saturate(160%);
                 -webkit-backdrop-filter: blur(1.5px) saturate(160%);
             }
