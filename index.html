@@ -905,20 +905,7 @@
         /* Rejection modal */
         .rejection-box {
             text-align: center;
-            animation: rejectIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        [data-theme="dark"] .rejection-box {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        [data-theme="light"] .rejection-box {
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            background: rgba(255,255,255,0.85);
-        }
-        .rejection-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+            animation: rejectIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .rejection-msg {
             font-size: 0.95rem;
@@ -927,9 +914,71 @@
             max-width: 280px;
             margin: 0 auto;
         }
+        .restore-link {
+            font-size: 0.78rem;
+            color: var(--accent);
+            cursor: pointer;
+            margin-top: 1rem;
+            margin-bottom: -0.5rem;
+            transition: opacity 0.2s;
+            user-select: none;
+        }
+        .restore-link:hover {
+            opacity: 0.7;
+        }
         @keyframes rejectIn {
-            0% { opacity: 0; transform: scale(0.85) translateY(10px); filter: blur(3px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+            0% { opacity: 0; transform: scale(0.9) translateY(8px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        /* Restore popup — top banner */
+        .restore-popup {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            animation: slideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+            transform: translateZ(0);
+        }
+        [data-theme="dark"] .restore-popup {
+            background: rgba(11, 13, 23, 0.85);
+        }
+        [data-theme="light"] .restore-popup {
+            background: rgba(255, 255, 255, 0.85);
+        }
+        .restore-popup-msg {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+        .restore-popup-btn {
+            padding: 0.4rem 1rem;
+            font-size: 0.78rem;
+            border: none;
+            border-radius: 100px;
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+            flex-shrink: 0;
+        }
+        .restore-popup-btn:hover {
+            opacity: 0.85;
+        }
+        @keyframes slideDown {
+            0% { opacity: 0; transform: translateY(-100%) translateZ(0); }
+            100% { opacity: 1; transform: translateY(0) translateZ(0); }
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.96); }
@@ -1399,6 +1448,7 @@
     }
 
     var studentRefused = localStorage.getItem('studentRefused') === 'true';
+    var restoreRequested = localStorage.getItem('restoreRequested') === 'true';
 
     function showRejectionModal() {
         var overlay = document.createElement('div');
@@ -1407,15 +1457,19 @@
         var box = document.createElement('div');
         box.className = 'verify-box rejection-box';
 
-        var icon = document.createElement('div');
-        icon.className = 'rejection-icon';
-        icon.textContent = '😔';
-
         var msg = document.createElement('p');
         msg.className = 'rejection-msg';
-        msg.textContent = currentLang === 'en'
-            ? 'Sorry, we are unable to serve you. If you have any questions, please contact us.'
-            : '对不起，我们无法为您提供服务。如有疑问，请联系我们。';
+        msg.textContent = '对不起，您的身份验证未通过，我们无法为您提供服务。';
+
+        var restoreLink = document.createElement('p');
+        restoreLink.className = 'restore-link';
+        restoreLink.textContent = '申请恢复验证';
+        restoreLink.onclick = function(e) {
+            e.stopPropagation();
+            overlay.remove();
+            localStorage.setItem('restoreRequested', 'true');
+            showVerifyModal();
+        };
 
         var closeBtn = document.createElement('button');
         closeBtn.className = 'verify-confirm';
@@ -1423,12 +1477,49 @@
         closeBtn.textContent = currentLang === 'en' ? 'Got it' : '知道了';
         closeBtn.onclick = function(e) { e.stopPropagation(); overlay.remove(); };
 
-        box.appendChild(icon);
         box.appendChild(msg);
+        box.appendChild(restoreLink);
         box.appendChild(closeBtn);
         overlay.appendChild(box);
         overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
         document.body.appendChild(overlay);
+    }
+
+    function showRestorePopup() {
+        var popup = document.createElement('div');
+        popup.className = 'restore-popup';
+
+        var msg = document.createElement('span');
+        msg.className = 'restore-popup-msg';
+        msg.textContent = '系统同意了您的申请，请重新选择您的身份。';
+
+        var okBtn = document.createElement('button');
+        okBtn.className = 'restore-popup-btn';
+        okBtn.textContent = currentLang === 'en' ? 'Got it' : '我知道了';
+        okBtn.onclick = function() {
+            popup.remove();
+            localStorage.removeItem('studentRefused');
+            localStorage.removeItem('restoreRequested');
+            studentRefused = false;
+            restoreRequested = false;
+            var btn = document.getElementById('verifyBtn');
+            if (btn) {
+                btn.classList.remove('verify-disabled');
+                btn.onclick = function(ev) { ev.preventDefault(); handleVerifyClick(); };
+            }
+            // Also clear the inline handler
+            var oldBtn = document.getElementById('verifyBtn');
+            if (oldBtn) oldBtn.onclick = function(ev) { ev.preventDefault(); handleVerifyClick(); };
+        };
+
+        popup.appendChild(msg);
+        popup.appendChild(okBtn);
+        document.body.appendChild(popup);
+
+        // Auto-remove after 10s if not clicked
+        setTimeout(function() {
+            if (popup.parentNode) popup.remove();
+        }, 10000);
     }
 
     function handleVerifyClick() {
@@ -1439,9 +1530,17 @@
         }
     }
 
-    // On page load, gray out button if previously refused
+    // On page load
     (function() {
-        if (studentRefused) {
+        if (restoreRequested) {
+            // Clear flags so popup only shows once
+            localStorage.removeItem('studentRefused');
+            localStorage.removeItem('restoreRequested');
+            studentRefused = false;
+            restoreRequested = false;
+            // Show restore popup immediately
+            setTimeout(showRestorePopup, 300);
+        } else if (studentRefused) {
             var btn = document.getElementById('verifyBtn');
             if (btn) {
                 btn.classList.add('verify-disabled');
@@ -1487,6 +1586,7 @@
             overlay.remove();
             studentRefused = true;
             localStorage.setItem('studentRefused', 'true');
+            localStorage.removeItem('restoreRequested');
             var btn = document.getElementById('verifyBtn');
             if (btn) {
                 btn.classList.add('verify-disabled');
