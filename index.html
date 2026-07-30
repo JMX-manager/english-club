@@ -295,7 +295,7 @@
         html[lang="zh"] .hero h1 .highlight {
             font-family: var(--zh-serif) !important;
             font-size: clamp(2.8rem, 8.5vw, 4.8rem);
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: 0.08em;
             line-height: 1.35;
         }
@@ -1447,7 +1447,7 @@
         }
     };
 
-    let currentLang = 'en';
+    let currentLang = 'zh';
 
     function toggleLang() {
         currentLang = currentLang === 'en' ? 'zh' : 'en';
@@ -1823,7 +1823,7 @@
     initTheme();
 
     // ---- Initial language setup + bind CTA alert ----
-    applyLang('en');
+    applyLang('zh');
 
     
     // ---- Persistent card glow on click ----
