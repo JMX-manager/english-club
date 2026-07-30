@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <script defer src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <style>
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1832,13 +1832,15 @@
         glowCards.forEach(function(card) {
             card.addEventListener('click', function(e) {
                 e.stopPropagation();
-                glowCards.forEach(function(c) { c.classList.remove('card-glow'); });
+                var active = document.querySelector('.card-glow');
+                if (active) active.classList.remove('card-glow');
                 this.classList.add('card-glow');
             });
         });
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.activity-card') && !e.target.closest('.stat-card')) {
-                glowCards.forEach(function(c) { c.classList.remove('card-glow'); });
+                var active = document.querySelector('.card-glow');
+                if (active) active.classList.remove('card-glow');
             }
         });
     })();
@@ -1851,7 +1853,7 @@
                 entry.target.classList.add('visible');
             }
         });
-    }, { threshold: 0.08 });
+    }, { threshold: 0.15 });
 
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
