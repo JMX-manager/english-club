@@ -1174,7 +1174,7 @@
         <div class="nav-row" id="navRow">
             <div class="logo" data-i18n="nav.logo">ENGLISH <span>·</span> CLUB</div>
             <div class="nav-right">
-                <button class="lang-toggle" id="langToggle" onclick="toggleLang()">中文</button>
+                <button class="lang-toggle" id="langToggle" onclick="toggleLang()">English</button>
                 <div class="nav-links">
                     <a href="#about" data-i18n="nav.about">About</a>
                     <a href="#activities" data-i18n="nav.activities">Activities</a>
@@ -1824,6 +1824,7 @@
 
     // ---- Initial language setup + bind CTA alert ----
     applyLang('zh');
+    document.getElementById('langToggle').textContent = 'English';
 
     
     // ---- Persistent card glow on click ----
