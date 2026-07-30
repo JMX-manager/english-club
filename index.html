@@ -11,9 +11,11 @@
     <meta property="og:image:height" content="400">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&family=Noto+Serif+SC:wght@600;700;900&display=swap');
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -1457,16 +1459,12 @@
             applyLang(currentLang);
             document.getElementById('langToggle').textContent = currentLang === 'en' ? '中文' : 'English';
             document.documentElement.lang = currentLang;
-            updateSchoolLinkText(currentLang);
-            void wrapper.offsetHeight;
+
+
             window.scrollTo(0, scrollY);
             wrapper.classList.remove('lang-fading');
             wrapper.classList.add('lang-fade-in');
         }, 200);
-    }
-
-    function updateSchoolLinkText() {
-        // English school site text already works via data-i18n
     }
 
     function applyLang(lang) {
@@ -1873,7 +1871,7 @@
         navEl.style.borderBottomColor = isScrolled
             ? 'var(--nav-border)'
             : 'transparent';
-    });
+    }, { passive: true });
 
 
 </script>
