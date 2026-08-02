@@ -1460,17 +1460,16 @@
 
     function toggleLang() {
         currentLang = currentLang === 'en' ? 'zh' : 'en';
+        const scrollY = window.scrollY;
         const wrapper = document.getElementById('page-content');
         const navBar = document.querySelector('.nav-row');
         wrapper.classList.remove('lang-fade-in');
         wrapper.classList.add('lang-fading');
         if (navBar) { navBar.classList.remove('lang-fade-in'); navBar.classList.add('lang-fading'); }
         setTimeout(() => {
-            const scrollY = window.scrollY;
             applyLang(currentLang);
             document.getElementById('langToggle').textContent = currentLang === 'en' ? '中文' : 'English';
             document.documentElement.lang = currentLang;
-
 
             window.scrollTo(0, scrollY);
             wrapper.classList.remove('lang-fading');
