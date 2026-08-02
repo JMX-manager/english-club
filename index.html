@@ -1333,6 +1333,7 @@
     // ===== i18n =====
     const i18n = {
         en: {
+            'doc.title': 'Fushun No.1 High School English Club',
             'nav.about': 'About',
             'nav.activities': 'Activities',
             'nav.join': 'Join',
@@ -1393,6 +1394,7 @@
             'disclaimer.text': 'This site is a personal project by Jin Mingxuan, built with HTML, CSS, and vanilla JavaScript, hosted on GitHub Pages. By browsing, you agree to the following:\n\n1. Content is for internal school reference only. No guarantee of accuracy. Reproduction or republication without permission is prohibited.\n\n2. This site collects no personal data. The developer is not liable for inaccessibility due to platform changes, network issues, or force majeure.\n\n3. Content and layout may be updated without notice. Use at your own risk.\n\n4. All interpretation rights reserved by the developer.'
         },
         zh: {
+            'doc.title': '抚顺市第一中学英语社团',
             'nav.about': '关于我们',
             'nav.activities': '活动',
             'nav.join': '加入',
@@ -1482,6 +1484,12 @@
                 el.innerHTML = dict[key];
             }
         });
+        const docTitle = dict['doc.title'];
+        if (docTitle !== undefined) {
+            document.title = docTitle;
+            var ogTitle = document.querySelector('meta[property="og:title"]');
+            if (ogTitle) { ogTitle.setAttribute('content', docTitle); }
+        }
 
     }
 
