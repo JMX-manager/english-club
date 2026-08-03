@@ -1369,7 +1369,7 @@
             'activities.card7.title': 'Exam Strategies',
             'activities.card7.desc': 'Proven strategies from top scorers. Build your foundation, boost your score.',
             'join.title': 'Come Join Us!',
-            'join.sub': 'We sincerely welcome you, and look forward to improving together with you, and it is our honor to bring joy to your English learning journey.<br><br><strong>We believe that language learning is a way to convey love and beauty.</strong>',
+            'join.sub': 'We sincerely welcome you, and look forward to improving together with you, and it is our honor to bring joy to your English learning journey.<br><br><strong>We believe that human language is a way to convey love and beauty.</strong>',
             'join.contact_label': 'Contact Us',
             'join.address_label': 'Activity Venue',
             'join.location': 'Rm 3, 5F North Bldg',
@@ -1610,24 +1610,11 @@
         closeBtn.className = 'verify-confirm';
         closeBtn.style.marginTop = '1.2rem';
         closeBtn.textContent = t('join.got_it');
-        closeBtn.onclick = function(e) {
-            e.stopPropagation();
-            var b = overlay.querySelector('.verify-box');
-            if (b) b.classList.add('closing');
-            overlay.classList.add('closing');
-            setTimeout(function() { if (overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 250);
-        };
+        closeBtn.onclick = function(e) { e.stopPropagation(); closeOverlay(overlay); };
         box.appendChild(msg);
         box.appendChild(closeBtn);
         overlay.appendChild(box);
-        overlay.onclick = function(e) {
-            if (e.target === overlay) {
-                var b = overlay.querySelector('.verify-box');
-                if (b) b.classList.add('closing');
-                overlay.classList.add('closing');
-                setTimeout(function() { if (overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 250);
-            }
-        };
+        overlay.onclick = function(e) { if (e.target === overlay) closeOverlay(overlay); };
         document.body.appendChild(overlay);
     }
 
